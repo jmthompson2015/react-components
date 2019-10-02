@@ -4,6 +4,137 @@
   (global = global || self, global.ReactComponent = factory());
 }(this, function () { 'use strict';
 
+  const ReactUtilities = {};
+
+  const merge = (obj1, obj2) => {
+    return { ...obj1, ...obj2 };
+  };
+
+  ReactUtilities.createButton = (element, key, className, props = {}) => {
+    const obj2 = { key, className };
+    const newProps = merge(props, obj2);
+
+    return ReactDOMFactories.button(newProps, element);
+  };
+
+  ReactUtilities.createCell = (element, key, className, props = {}) => {
+    const obj2 = { key, className: `dtc${className ? ` ${className}` : ""}` };
+    const newProps = merge(props, obj2);
+
+    return ReactDOMFactories.div(newProps, element);
+  };
+
+  ReactUtilities.createFlexbox = (cells, key, className, props = {}) => {
+    const obj2 = { key, className: `flex${className ? ` ${className}` : ""}` };
+    const newProps = merge(props, obj2);
+
+    return ReactDOMFactories.div(newProps, cells);
+  };
+
+  ReactUtilities.createFlexboxWrap = (cells, key, className, props = {}) => {
+    const obj2 = {
+      key,
+      className: `flex flex-wrap${className ? ` ${className}` : ""}`
+    };
+    const newProps = merge(props, obj2);
+
+    return ReactDOMFactories.div(newProps, cells);
+  };
+
+  ReactUtilities.createImg = (src, key, className, props = {}) => {
+    const obj2 = { src, key, className };
+    const newProps = merge(props, obj2);
+
+    return ReactDOMFactories.img(newProps);
+  };
+
+  ReactUtilities.createRow = (cells, key, className, props = {}) => {
+    const obj2 = { key, className: `dt-row${className ? ` ${className}` : ""}` };
+    const newProps = merge(props, obj2);
+
+    return ReactDOMFactories.div(newProps, cells);
+  };
+
+  ReactUtilities.createSpan = (element, key, className, props = {}) => {
+    const obj2 = { key, className };
+    const newProps = merge(props, obj2);
+
+    return ReactDOMFactories.span(newProps, element);
+  };
+
+  ReactUtilities.createTable = (rows, key, className, props = {}) => {
+    const obj2 = { key, className: `dt${className ? ` ${className}` : ""}` };
+    const newProps = merge(props, obj2);
+
+    return ReactDOMFactories.div(newProps, rows);
+  };
+
+  class CollapsiblePane extends React.Component {
+    constructor(props) {
+      super(props);
+
+      this.state = { isExpanded: props.isExpanded };
+
+      this.toggleExpand = this.toggleExpandFunction.bind(this);
+    }
+
+    createElementCell() {
+      const { element } = this.props;
+      const { isExpanded } = this.state;
+      const className = isExpanded ? "dtc pa1 v-mid" : "dn";
+
+      return ReactDOMFactories.div({ key: "elementCell", className }, element);
+    }
+
+    createHeaderCell() {
+      const { header, headerClass } = this.props;
+      const { isExpanded } = this.state;
+      const headerCell = ReactUtilities.createCell(header, "headerCell", headerClass);
+      const expandLabel = isExpanded ? "\u25B6" : "\u25BC";
+      const expandControl = ReactDOMFactories.div(
+        { key: "expandCell", onClick: this.toggleExpand },
+        expandLabel
+      );
+      const row = ReactUtilities.createRow([headerCell, expandControl], "headerExpandRow");
+      const table = ReactUtilities.createTable(row, "headerExpandTable", "w-100");
+
+      return ReactUtilities.createCell(table, "headerCell");
+    }
+
+    toggleExpandFunction() {
+      const { isExpanded: oldIsExpanded } = this.state;
+
+      this.setState({ isExpanded: !oldIsExpanded });
+    }
+
+    render() {
+      const { className } = this.props;
+
+      const headerCell = this.createHeaderCell();
+      const elementCell = this.createElementCell();
+
+      const rows = [ReactUtilities.createRow(headerCell, "headerRow"), ReactUtilities.createRow(elementCell, "elementRow")];
+
+      return ReactUtilities.createTable(rows, "collapsiblePaneTable", className);
+    }
+  }
+
+  CollapsiblePane.propTypes = {
+    element: PropTypes.shape().isRequired,
+
+    className: PropTypes.string,
+    header: PropTypes.string,
+    headerClass: PropTypes.string,
+    isExpanded: PropTypes.bool
+  };
+
+  CollapsiblePane.defaultProps = {
+    className: "bg-light-gray ma1",
+    header: undefined,
+    headerClass: "b f5 ph1 pt1 tc",
+    isExpanded: true
+  };
+
   /* eslint no-console: ["error", { allow: ["log"] }] */
 
   const loadImage = (src, isVerbose) =>
@@ -183,71 +314,6 @@
     titleClass: "b bg-light-gray f4 tc"
   };
 
-  const ReactUtilities = {};
-
-  const merge = (obj1, obj2) => {
-    return { ...obj1, ...obj2 };
-  };
-
-  ReactUtilities.createButton = (element, key, className, props = {}) => {
-    const obj2 = { key, className };
-    const newProps = merge(props, obj2);
-
-    return ReactDOMFactories.button(newProps, element);
-  };
-
-  ReactUtilities.createCell = (element, key, className, props = {}) => {
-    const obj2 = { key, className: `dtc${className ? ` ${className}` : ""}` };
-    const newProps = merge(props, obj2);
-
-    return ReactDOMFactories.div(newProps, element);
-  };
-
-  ReactUtilities.createFlexbox = (cells, key, className, props = {}) => {
-    const obj2 = { key, className: `flex${className ? ` ${className}` : ""}` };
-    const newProps = merge(props, obj2);
-
-    return ReactDOMFactories.div(newProps, cells);
-  };
-
-  ReactUtilities.createFlexboxWrap = (cells, key, className, props = {}) => {
-    const obj2 = {
-      key,
-      className: `flex flex-wrap${className ? ` ${className}` : ""}`
-    };
-    const newProps = merge(props, obj2);
-
-    return ReactDOMFactories.div(newProps, cells);
-  };
-
-  ReactUtilities.createImg = (src, key, className, props = {}) => {
-    const obj2 = { src, key, className };
-    const newProps = merge(props, obj2);
-
-    return ReactDOMFactories.img(newProps);
-  };
-
-  ReactUtilities.createRow = (cells, key, className, props = {}) => {
-    const obj2 = { key, className: `dt-row${className ? ` ${className}` : ""}` };
-    const newProps = merge(props, obj2);
-
-    return ReactDOMFactories.div(newProps, cells);
-  };
-
-  ReactUtilities.createSpan = (element, key, className, props = {}) => {
-    const obj2 = { key, className };
-    const newProps = merge(props, obj2);
-
-    return ReactDOMFactories.span(newProps, element);
-  };
-
-  ReactUtilities.createTable = (rows, key, className, props = {}) => {
-    const obj2 = { key, className: `dt${className ? ` ${className}` : ""}` };
-    const newProps = merge(props, obj2);
-
-    return ReactDOMFactories.div(newProps, rows);
-  };
-
   class TitledElement extends React.Component {
     render() {
       const { className, element, title, titleClass } = this.props;
@@ -276,6 +342,7 @@
 
   const ReactComponent = {};
 
+  ReactComponent.CollapsiblePane = CollapsiblePane;
   ReactComponent.LayeredCanvas = LayeredCanvas;
   ReactComponent.OptionPane = OptionPane;
   ReactComponent.ReactUtilities = ReactUtilities;
