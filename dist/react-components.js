@@ -4,6 +4,54 @@
   (global = global || self, global.ReactComponent = factory());
 }(this, function () { 'use strict';
 
+  class Checkbox extends React.PureComponent {
+    constructor(props) {
+      super(props);
+
+      this.handleChange = this.handleChangeFunction.bind(this);
+    }
+
+    handleChangeFunction(event) {
+      const { item, onChange } = this.props;
+      const { checked } = event.target;
+
+      onChange(item.key, checked);
+    }
+
+    render() {
+      const { item, isChecked } = this.props;
+
+      const input = ReactDOMFactories.input({
+        key: `${item.key}${isChecked}`,
+        type: "checkbox",
+        checked: isChecked,
+        onChange: this.handleChange,
+        style: { verticalAlign: "middle" },
+      });
+      const labelElement = ReactDOMFactories.span({ style: { verticalAlign: "middle" } }, item.label);
+
+      return ReactDOMFactories.label(
+        { style: { display: "block", verticalAlign: "middle" } },
+        input,
+        labelElement
+      );
+    }
+  }
+
+  Checkbox.propTypes = {
+    item: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }).isRequired,
+    onChange: PropTypes.func.isRequired,
+
+    isChecked: PropTypes.bool,
+  };
+
+  Checkbox.defaultProps = {
+    isChecked: false,
+  };
+
   const ReactUtilities = {};
 
   const merge = (obj1, obj2) => {
@@ -67,6 +115,74 @@
     const newProps = merge(props, obj2);
 
     return ReactDOMFactories.div(newProps, rows);
+  };
+
+  class CheckboxPanel extends React.PureComponent {
+    constructor(props) {
+      super(props);
+
+      const { itemToChecked } = this.props;
+      this.state = { itemToChecked };
+      this.handleApply = this.handleApplyFunction.bind(this);
+      this.handleChange = this.handleChangeFunction.bind(this);
+    }
+
+    createButtonTable() {
+      const applyButton = ReactUtilities.createButton("Apply", null, null, { onClick: this.handleApply });
+      const cell = ReactUtilities.createCell(applyButton, "applyButton", "button");
+      const row = ReactUtilities.createRow(cell, "button-row");
+
+      return ReactUtilities.createTable(row, "buttonTable", "buttons");
+    }
+
+    handleApplyFunction() {
+      const { applyOnClick } = this.props;
+      const { itemToChecked } = this.state;
+
+      applyOnClick(itemToChecked);
+    }
+
+    handleChangeFunction(itemKey, isChecked) {
+      const { itemToChecked } = this.state;
+      const newitemToChecked = { ...itemToChecked, [itemKey]: isChecked };
+
+      this.setState({ itemToChecked: newitemToChecked });
+    }
+
+    render() {
+      const { items } = this.props;
+      const { itemToChecked } = this.state;
+
+      const mapFunction = (item) => {
+        const isChecked = itemToChecked[item.key];
+        const checkbox = React.createElement(Checkbox, {
+          item,
+          isChecked,
+          onChange: this.handleChange,
+        });
+        const cell = ReactUtilities.createCell(checkbox);
+        return ReactUtilities.createRow(cell, item.key);
+      };
+      const checkboxes = items.map(mapFunction);
+
+      const cell0 = ReactUtilities.createTable(checkboxes, "checkboxTable", "checkbox-panel");
+      const cell1 = ReactUtilities.createCell(this.createButtonTable(), "buttonTable", "button-panel");
+
+      const rows = [ReactUtilities.createRow(cell0, "checkboxTableRow"), ReactUtilities.createRow(cell1, "buttonRow")];
+
+      return ReactUtilities.createTable(rows, "checkboxTable");
+    }
+  }
+
+  CheckboxPanel.propTypes = {
+    applyOnClick: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    itemToChecked: PropTypes.shape().isRequired,
   };
 
   class CollapsiblePane extends React.Component {
@@ -314,6 +430,119 @@
     titleClass: "b bg-light-gray f4 tc"
   };
 
+  class RadioButton extends React.PureComponent {
+    constructor(props) {
+      super(props);
+
+      this.handleChange = this.handleChangeFunction.bind(this);
+    }
+
+    handleChangeFunction(event) {
+      const { item, onChange } = this.props;
+      const { checked } = event.target;
+
+      onChange(item.key, checked);
+    }
+
+    render() {
+      const { item, isChecked } = this.props;
+
+      const input = ReactDOMFactories.input({
+        key: `${item.key}${isChecked}`,
+        type: "radio",
+        checked: isChecked,
+        onChange: this.handleChange,
+        style: { verticalAlign: "middle" },
+      });
+      const labelElement = ReactDOMFactories.span({ style: { verticalAlign: "middle" } }, item.label);
+
+      return ReactDOMFactories.label(
+        { style: { display: "block", verticalAlign: "middle" } },
+        input,
+        labelElement
+      );
+    }
+  }
+
+  RadioButton.propTypes = {
+    item: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }).isRequired,
+    onChange: PropTypes.func.isRequired,
+
+    isChecked: PropTypes.bool,
+  };
+
+  RadioButton.defaultProps = {
+    isChecked: false,
+  };
+
+  class RadioButtonPanel extends React.PureComponent {
+    constructor(props) {
+      super(props);
+
+      const { selected } = this.props;
+      this.state = { selected };
+      this.handleApply = this.handleApplyFunction.bind(this);
+      this.handleChange = this.handleChangeFunction.bind(this);
+    }
+
+    createButtonTable() {
+      const applyButton = ReactUtilities.createButton("Apply", null, null, { onClick: this.handleApply });
+      const cell = ReactUtilities.createCell(applyButton, "applyButton", "button");
+      const row = ReactUtilities.createRow(cell, "button-row");
+
+      return ReactUtilities.createTable(row, "buttonTable", "buttons");
+    }
+
+    handleApplyFunction() {
+      const { applyOnClick } = this.props;
+      const { selected } = this.state;
+
+      applyOnClick(selected);
+    }
+
+    handleChangeFunction(itemKey) {
+      this.setState({ selected: itemKey });
+    }
+
+    render() {
+      const { items } = this.props;
+      const { selected } = this.state;
+
+      const mapFunction = (item) => {
+        const isChecked = item.key === selected;
+        const radioButton = React.createElement(RadioButton, {
+          item,
+          isChecked,
+          onChange: this.handleChange,
+        });
+        const cell = ReactUtilities.createCell(radioButton);
+        return ReactUtilities.createRow(cell, item.key);
+      };
+      const radioButtons = items.map(mapFunction);
+
+      const cell0 = ReactUtilities.createTable(radioButtons, "radioButtonTable", "radio-button-panel");
+      const cell1 = ReactUtilities.createCell(this.createButtonTable(), "buttonTable", "button-panel");
+
+      const rows = [ReactUtilities.createRow(cell0, "radioButtonTableRow"), ReactUtilities.createRow(cell1, "buttonRow")];
+
+      return ReactUtilities.createTable(rows, "radioButtonTable");
+    }
+  }
+
+  RadioButtonPanel.propTypes = {
+    applyOnClick: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    selected: PropTypes.string.isRequired,
+  };
+
   class TitledElement extends React.Component {
     render() {
       const { className, element, elementClass, title, titleClass } = this.props;
@@ -344,9 +573,11 @@
 
   const ReactComponent = {};
 
+  ReactComponent.CheckboxPanel = CheckboxPanel;
   ReactComponent.CollapsiblePane = CollapsiblePane;
   ReactComponent.LayeredCanvas = LayeredCanvas;
   ReactComponent.OptionPane = OptionPane;
+  ReactComponent.RadioButtonPanel = RadioButtonPanel;
   ReactComponent.ReactUtilities = ReactUtilities;
   ReactComponent.TitledElement = TitledElement;
 
