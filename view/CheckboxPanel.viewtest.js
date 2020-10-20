@@ -27,9 +27,9 @@ const items = [
 
 const myItemToChecked = {
   name: true,
-  red: false,
+  // red: false,
   green: true,
-  blue: false,
+  // blue: false,
   liked: true,
 };
 
@@ -37,9 +37,17 @@ const applyOnClick = (itemToChecked) => {
   console.log(`applyOnClick() itemToChecked = ${JSON.stringify(itemToChecked)}`);
 };
 
-const element = React.createElement(CheckboxPanel, {
+const element0 = React.createElement(CheckboxPanel, {
   applyOnClick,
   items,
   itemToChecked: myItemToChecked,
 });
-ReactDOM.render(element, document.getElementById("panel"));
+ReactDOM.render(element0, document.getElementById("panel0"));
+
+const element1 = React.createElement(CheckboxPanel, {
+  applyOnClick,
+  items,
+  itemToChecked: myItemToChecked,
+  useSelectButtons: true,
+});
+ReactDOM.render(element1, document.getElementById("panel1"));

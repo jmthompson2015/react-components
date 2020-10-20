@@ -9,14 +9,33 @@ class CheckboxPanel extends React.PureComponent {
     this.state = { itemToChecked };
     this.handleApply = this.handleApplyFunction.bind(this);
     this.handleChange = this.handleChangeFunction.bind(this);
+    this.handleSelectAll = this.handleSelectAllFunction.bind(this);
+    this.handleSelectNone = this.handleSelectNoneFunction.bind(this);
   }
 
   createButtonTable() {
-    const applyButton = RU.createButton("Apply", null, null, { onClick: this.handleApply });
-    const cell = RU.createCell(applyButton, "applyButton", "button");
-    const row = RU.createRow(cell, "button-row");
+    const { useSelectButtons } = this.props;
+    const applyButton = RU.createButton("Apply", "applyButton", undefined, {
+      onClick: this.handleApply,
+    });
+    const applyCell = RU.createCell(applyButton, "applyCell");
+    let cells = applyCell;
 
-    return RU.createTable(row, "buttonTable", "buttons");
+    if (useSelectButtons) {
+      const selectAllButton = RU.createButton("Select All", "selectAllButton", undefined, {
+        onClick: this.handleSelectAll,
+      });
+      const selectNoneButton = RU.createButton("Select None", "selectNoneButton", undefined, {
+        onClick: this.handleSelectNone,
+      });
+      const cell0 = RU.createCell(selectAllButton, "selectAllCell");
+      const cell1 = RU.createCell(selectNoneButton, "selectNoneCell");
+      cells = [cell0, cell1, applyCell];
+    }
+
+    const row = RU.createRow(cells, "buttonRow");
+
+    return RU.createTable(row, "buttonTable");
   }
 
   handleApplyFunction() {
@@ -28,9 +47,21 @@ class CheckboxPanel extends React.PureComponent {
 
   handleChangeFunction(itemKey, isChecked) {
     const { itemToChecked } = this.state;
-    const newitemToChecked = { ...itemToChecked, [itemKey]: isChecked };
+    const newItemToChecked = { ...itemToChecked, [itemKey]: isChecked };
 
-    this.setState({ itemToChecked: newitemToChecked });
+    this.setState({ itemToChecked: newItemToChecked });
+  }
+
+  handleSelectAllFunction() {
+    const { items } = this.props;
+    const reduceFunction = (accum, item) => ({ ...accum, [item.key]: true });
+    const newItemToChecked = items.reduce(reduceFunction, {});
+
+    this.setState({ itemToChecked: newItemToChecked });
+  }
+
+  handleSelectNoneFunction() {
+    this.setState({ itemToChecked: {} });
   }
 
   render() {
@@ -67,6 +98,12 @@ CheckboxPanel.propTypes = {
     })
   ).isRequired,
   itemToChecked: PropTypes.shape().isRequired,
+
+  useSelectButtons: PropTypes.bool,
+};
+
+CheckboxPanel.defaultProps = {
+  useSelectButtons: false,
 };
 
 export default CheckboxPanel;

@@ -125,14 +125,33 @@
       this.state = { itemToChecked };
       this.handleApply = this.handleApplyFunction.bind(this);
       this.handleChange = this.handleChangeFunction.bind(this);
+      this.handleSelectAll = this.handleSelectAllFunction.bind(this);
+      this.handleSelectNone = this.handleSelectNoneFunction.bind(this);
     }
 
     createButtonTable() {
-      const applyButton = ReactUtilities.createButton("Apply", null, null, { onClick: this.handleApply });
-      const cell = ReactUtilities.createCell(applyButton, "applyButton", "button");
-      const row = ReactUtilities.createRow(cell, "button-row");
+      const { useSelectButtons } = this.props;
+      const applyButton = ReactUtilities.createButton("Apply", "applyButton", undefined, {
+        onClick: this.handleApply,
+      });
+      const applyCell = ReactUtilities.createCell(applyButton, "applyCell");
+      let cells = applyCell;
 
-      return ReactUtilities.createTable(row, "buttonTable", "buttons");
+      if (useSelectButtons) {
+        const selectAllButton = ReactUtilities.createButton("Select All", "selectAllButton", undefined, {
+          onClick: this.handleSelectAll,
+        });
+        const selectNoneButton = ReactUtilities.createButton("Select None", "selectNoneButton", undefined, {
+          onClick: this.handleSelectNone,
+        });
+        const cell0 = ReactUtilities.createCell(selectAllButton, "selectAllCell");
+        const cell1 = ReactUtilities.createCell(selectNoneButton, "selectNoneCell");
+        cells = [cell0, cell1, applyCell];
+      }
+
+      const row = ReactUtilities.createRow(cells, "buttonRow");
+
+      return ReactUtilities.createTable(row, "buttonTable");
     }
 
     handleApplyFunction() {
@@ -144,9 +163,21 @@
 
     handleChangeFunction(itemKey, isChecked) {
       const { itemToChecked } = this.state;
-      const newitemToChecked = { ...itemToChecked, [itemKey]: isChecked };
+      const newItemToChecked = { ...itemToChecked, [itemKey]: isChecked };
 
-      this.setState({ itemToChecked: newitemToChecked });
+      this.setState({ itemToChecked: newItemToChecked });
+    }
+
+    handleSelectAllFunction() {
+      const { items } = this.props;
+      const reduceFunction = (accum, item) => ({ ...accum, [item.key]: true });
+      const newItemToChecked = items.reduce(reduceFunction, {});
+
+      this.setState({ itemToChecked: newItemToChecked });
+    }
+
+    handleSelectNoneFunction() {
+      this.setState({ itemToChecked: {} });
     }
 
     render() {
@@ -183,6 +214,12 @@
       })
     ).isRequired,
     itemToChecked: PropTypes.shape().isRequired,
+
+    useSelectButtons: PropTypes.bool,
+  };
+
+  CheckboxPanel.defaultProps = {
+    useSelectButtons: false,
   };
 
   class CollapsiblePane extends React.Component {
