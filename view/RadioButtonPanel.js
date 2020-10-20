@@ -7,27 +7,14 @@ class RadioButtonPanel extends React.PureComponent {
 
     const { selected } = this.props;
     this.state = { selected };
-    this.handleApply = this.handleApplyFunction.bind(this);
     this.handleChange = this.handleChangeFunction.bind(this);
-  }
-
-  createButtonTable() {
-    const applyButton = RU.createButton("Apply", null, null, { onClick: this.handleApply });
-    const cell = RU.createCell(applyButton, "applyButton", "button");
-    const row = RU.createRow(cell, "button-row");
-
-    return RU.createTable(row, "buttonTable", "buttons");
-  }
-
-  handleApplyFunction() {
-    const { applyOnClick } = this.props;
-    const { selected } = this.state;
-
-    applyOnClick(selected);
   }
 
   handleChangeFunction(itemKey) {
     this.setState({ selected: itemKey });
+
+    const { applyOnClick } = this.props;
+    applyOnClick(itemKey);
   }
 
   render() {
@@ -46,12 +33,7 @@ class RadioButtonPanel extends React.PureComponent {
     };
     const radioButtons = items.map(mapFunction);
 
-    const cell0 = RU.createTable(radioButtons, "radioButtonTable", "radio-button-panel");
-    const cell1 = RU.createCell(this.createButtonTable(), "buttonTable", "button-panel");
-
-    const rows = [RU.createRow(cell0, "radioButtonTableRow"), RU.createRow(cell1, "buttonRow")];
-
-    return RU.createTable(rows, "radioButtonTable");
+    return RU.createTable(radioButtons, "radioButtonTable", "radio-button-table");
   }
 }
 

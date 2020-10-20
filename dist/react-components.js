@@ -484,27 +484,14 @@
 
       const { selected } = this.props;
       this.state = { selected };
-      this.handleApply = this.handleApplyFunction.bind(this);
       this.handleChange = this.handleChangeFunction.bind(this);
-    }
-
-    createButtonTable() {
-      const applyButton = ReactUtilities.createButton("Apply", null, null, { onClick: this.handleApply });
-      const cell = ReactUtilities.createCell(applyButton, "applyButton", "button");
-      const row = ReactUtilities.createRow(cell, "button-row");
-
-      return ReactUtilities.createTable(row, "buttonTable", "buttons");
-    }
-
-    handleApplyFunction() {
-      const { applyOnClick } = this.props;
-      const { selected } = this.state;
-
-      applyOnClick(selected);
     }
 
     handleChangeFunction(itemKey) {
       this.setState({ selected: itemKey });
+
+      const { applyOnClick } = this.props;
+      applyOnClick(itemKey);
     }
 
     render() {
@@ -523,12 +510,7 @@
       };
       const radioButtons = items.map(mapFunction);
 
-      const cell0 = ReactUtilities.createTable(radioButtons, "radioButtonTable", "radio-button-panel");
-      const cell1 = ReactUtilities.createCell(this.createButtonTable(), "buttonTable", "button-panel");
-
-      const rows = [ReactUtilities.createRow(cell0, "radioButtonTableRow"), ReactUtilities.createRow(cell1, "buttonRow")];
-
-      return ReactUtilities.createTable(rows, "radioButtonTable");
+      return ReactUtilities.createTable(radioButtons, "radioButtonTable", "radio-button-table");
     }
   }
 
