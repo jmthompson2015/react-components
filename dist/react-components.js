@@ -151,7 +151,7 @@
 
       const row = ReactUtilities.createRow(cells, "buttonRow");
 
-      return ReactUtilities.createTable(row, "buttonTable");
+      return ReactUtilities.createTable(row, "buttonTable", "button-table");
     }
 
     handleApplyFunction() {
@@ -195,13 +195,18 @@
         return ReactUtilities.createRow(cell, item.key);
       };
       const checkboxes = items.map(mapFunction);
+      const table = ReactUtilities.createTable(checkboxes, "checkboxesTable", "checkboxes-table");
+      const scrollPane = ReactDOMFactories.div({ className: "scroll-pane" }, table);
 
-      const cell0 = ReactUtilities.createTable(checkboxes, "checkboxTable", "checkbox-panel");
-      const cell1 = ReactUtilities.createCell(this.createButtonTable(), "buttonTable", "button-panel");
+      const cell0 = ReactUtilities.createCell(scrollPane, "checkboxesCell", "checkboxes-cell");
+      const cell1 = ReactUtilities.createCell(this.createButtonTable(), "buttonCell", "button-cell");
 
-      const rows = [ReactUtilities.createRow(cell0, "checkboxTableRow"), ReactUtilities.createRow(cell1, "buttonRow")];
+      const rows = [
+        ReactUtilities.createRow(cell0, "checkboxRow", "checkbox-row"),
+        ReactUtilities.createRow(cell1, "buttonRow", "button-row"),
+      ];
 
-      return ReactUtilities.createTable(rows, "checkboxTable");
+      return ReactUtilities.createTable(rows, "checkboxPanel", "checkbox-panel");
     }
   }
 

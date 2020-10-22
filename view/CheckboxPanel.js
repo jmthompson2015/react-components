@@ -35,7 +35,7 @@ class CheckboxPanel extends React.PureComponent {
 
     const row = RU.createRow(cells, "buttonRow");
 
-    return RU.createTable(row, "buttonTable");
+    return RU.createTable(row, "buttonTable", "button-table");
   }
 
   handleApplyFunction() {
@@ -79,13 +79,18 @@ class CheckboxPanel extends React.PureComponent {
       return RU.createRow(cell, item.key);
     };
     const checkboxes = items.map(mapFunction);
+    const table = RU.createTable(checkboxes, "checkboxesTable", "checkboxes-table");
+    const scrollPane = ReactDOMFactories.div({ className: "scroll-pane" }, table);
 
-    const cell0 = RU.createTable(checkboxes, "checkboxTable", "checkbox-panel");
-    const cell1 = RU.createCell(this.createButtonTable(), "buttonTable", "button-panel");
+    const cell0 = RU.createCell(scrollPane, "checkboxesCell", "checkboxes-cell");
+    const cell1 = RU.createCell(this.createButtonTable(), "buttonCell", "button-cell");
 
-    const rows = [RU.createRow(cell0, "checkboxTableRow"), RU.createRow(cell1, "buttonRow")];
+    const rows = [
+      RU.createRow(cell0, "checkboxRow", "checkbox-row"),
+      RU.createRow(cell1, "buttonRow", "button-row"),
+    ];
 
-    return RU.createTable(rows, "checkboxTable");
+    return RU.createTable(rows, "checkboxPanel", "checkbox-panel");
   }
 }
 
