@@ -2,7 +2,37 @@
 
 import CheckboxPanel from "./CheckboxPanel.js";
 
-const items = [
+const applyOnClick = (selectedItems) => {
+  console.log(`applyOnClick() selectedItems = ${JSON.stringify(selectedItems)}`);
+};
+
+// /////////////////////////////////////////////////////////////////////////////
+// Strings
+const items0 = ["Red", "Green", "Blue"];
+const selectedItems0 = [items0[1]];
+
+const element0 = React.createElement(CheckboxPanel, {
+  applyOnClick,
+  items: items0,
+  selectedItems: selectedItems0,
+});
+ReactDOM.render(element0, document.getElementById("panel0"));
+
+// /////////////////////////////////////////////////////////////////////////////
+// Numbers
+const items1 = [1, 2, 3];
+const selectedItems1 = [items1[1]];
+
+const element1 = React.createElement(CheckboxPanel, {
+  applyOnClick,
+  items: items1,
+  selectedItems: selectedItems1,
+});
+ReactDOM.render(element1, document.getElementById("panel1"));
+
+// /////////////////////////////////////////////////////////////////////////////
+// Objects
+const items2 = [
   {
     key: "name",
     label: "Name",
@@ -25,29 +55,48 @@ const items = [
   },
 ];
 
-const myItemToChecked = {
-  name: true,
-  // red: false,
-  green: true,
-  // blue: false,
-  liked: true,
+const labelFunction2 = (item) => {
+  const keyToClass = {
+    red: "bg-red",
+    green: "bg-green",
+    blue: "bg-blue",
+  };
+  const className = `v-mid ${keyToClass[item.key]}`;
+
+  return ReactDOMFactories.span({ className }, item.label);
 };
 
-const applyOnClick = (itemToChecked) => {
-  console.log(`applyOnClick() itemToChecked = ${JSON.stringify(itemToChecked)}`);
-};
-
-const element0 = React.createElement(CheckboxPanel, {
+const selectedItems2 = [items2[0], items2[2], items2[4]];
+const element2 = React.createElement(CheckboxPanel, {
   applyOnClick,
-  items,
-  itemToChecked: myItemToChecked,
-});
-ReactDOM.render(element0, document.getElementById("panel0"));
-
-const element1 = React.createElement(CheckboxPanel, {
-  applyOnClick,
-  items,
-  itemToChecked: myItemToChecked,
+  items: items2,
+  labelFunction: labelFunction2,
+  selectedItems: selectedItems2,
   useSelectButtons: true,
 });
-ReactDOM.render(element1, document.getElementById("panel1"));
+ReactDOM.render(element2, document.getElementById("panel2"));
+
+// /////////////////////////////////////////////////////////////////////////////
+// Objects
+const items3 = [
+  ["one", "two", "three"],
+  [1, 2, 3],
+  ["red", "green", "blue"],
+];
+
+const labelFunction3 = (item) => {
+  const className = "v-mid";
+  const value = `[${item.join(", ")}]`;
+
+  return ReactDOMFactories.span({ className }, value);
+};
+
+const selectedItems3 = [items3[1]];
+const element3 = React.createElement(CheckboxPanel, {
+  applyOnClick,
+  items: items3,
+  labelFunction: labelFunction3,
+  selectedItems: selectedItems3,
+  useSelectButtons: true,
+});
+ReactDOM.render(element3, document.getElementById("panel3"));

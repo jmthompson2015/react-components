@@ -1,12 +1,16 @@
 import Checkbox from "./Checkbox.js";
 import RU from "./ReactUtilities.js";
 
+const defaultKeyFunction = (item) => {
+  return typeof item === "object" ? JSON.stringify(item) : item;
+};
+
 class CheckboxPanel extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const { itemToChecked } = this.props;
-    this.state = { itemToChecked };
+    const { selectedItems } = this.props;
+    this.state = { selectedItems };
     this.handleApply = this.handleApplyFunction.bind(this);
     this.handleChange = this.handleChangeFunction.bind(this);
     this.handleSelectAll = this.handleSelectAllFunction.bind(this);
@@ -40,43 +44,48 @@ class CheckboxPanel extends React.PureComponent {
 
   handleApplyFunction() {
     const { applyOnClick } = this.props;
-    const { itemToChecked } = this.state;
+    const { selectedItems } = this.state;
 
-    applyOnClick(itemToChecked);
+    applyOnClick(selectedItems);
   }
 
-  handleChangeFunction(itemKey, isChecked) {
-    const { itemToChecked } = this.state;
-    const newItemToChecked = { ...itemToChecked, [itemKey]: isChecked };
+  handleChangeFunction(item, isChecked) {
+    const { selectedItems } = this.state;
+    let newSelectedItems;
 
-    this.setState({ itemToChecked: newItemToChecked });
+    if (isChecked) {
+      newSelectedItems = [...selectedItems, item];
+    } else {
+      newSelectedItems = selectedItems.filter((item2) => item2 !== item);
+    }
+
+    this.setState({ selectedItems: newSelectedItems });
   }
 
   handleSelectAllFunction() {
     const { items } = this.props;
-    const reduceFunction = (accum, item) => ({ ...accum, [item.key]: true });
-    const newItemToChecked = items.reduce(reduceFunction, {});
 
-    this.setState({ itemToChecked: newItemToChecked });
+    this.setState({ selectedItems: items });
   }
 
   handleSelectNoneFunction() {
-    this.setState({ itemToChecked: {} });
+    this.setState({ selectedItems: [] });
   }
 
   render() {
-    const { items } = this.props;
-    const { itemToChecked } = this.state;
+    const { items, keyFunction, labelFunction } = this.props;
+    const { selectedItems } = this.state;
 
     const mapFunction = (item) => {
-      const isChecked = itemToChecked[item.key];
+      const isChecked = selectedItems.includes(item);
       const checkbox = React.createElement(Checkbox, {
         item,
         isChecked,
+        labelFunction,
         onChange: this.handleChange,
       });
       const cell = RU.createCell(checkbox);
-      return RU.createRow(cell, item.key);
+      return RU.createRow(cell, keyFunction(item));
     };
     const checkboxes = items.map(mapFunction);
     const table = RU.createTable(checkboxes, "checkboxesTable", "checkboxes-table");
@@ -96,18 +105,18 @@ class CheckboxPanel extends React.PureComponent {
 
 CheckboxPanel.propTypes = {
   applyOnClick: PropTypes.func.isRequired,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  itemToChecked: PropTypes.shape().isRequired,
+  items: PropTypes.arrayOf().isRequired,
 
+  keyFunction: PropTypes.func,
+  labelFunction: PropTypes.func,
+  selectedItems: PropTypes.arrayOf(),
   useSelectButtons: PropTypes.bool,
 };
 
 CheckboxPanel.defaultProps = {
+  keyFunction: defaultKeyFunction,
+  labelFunction: undefined,
+  selectedItems: [],
   useSelectButtons: false,
 };
 

@@ -9,41 +9,41 @@ class Checkbox extends React.PureComponent {
     const { item, onChange } = this.props;
     const { checked } = event.target;
 
-    onChange(item.key, checked);
+    onChange(item, checked);
   }
 
   render() {
-    const { item, isChecked } = this.props;
+    const { item, isChecked, labelFunction } = this.props;
 
     const input = ReactDOMFactories.input({
       key: `${item.key}${isChecked}`,
+      className: "v-mid",
       type: "checkbox",
       checked: isChecked,
       onChange: this.handleChange,
-      style: { verticalAlign: "middle" },
     });
-    const labelElement = ReactDOMFactories.span({ style: { verticalAlign: "middle" } }, item.label);
+    const labelElement = labelFunction(item);
 
-    return ReactDOMFactories.label(
-      { style: { display: "block", verticalAlign: "middle" } },
-      input,
-      labelElement
-    );
+    return ReactDOMFactories.label({ className: "db v-mid" }, input, labelElement);
   }
 }
 
 Checkbox.propTypes = {
-  item: PropTypes.shape({
-    key: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-  }).isRequired,
+  item: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.shape(),
+    PropTypes.arrayOf(),
+  ]).isRequired,
   onChange: PropTypes.func.isRequired,
 
   isChecked: PropTypes.bool,
+  labelFunction: PropTypes.func,
 };
 
 Checkbox.defaultProps = {
   isChecked: false,
+  labelFunction: (item) => ReactDOMFactories.span({ className: "v-mid" }, item),
 };
 
 export default Checkbox;
