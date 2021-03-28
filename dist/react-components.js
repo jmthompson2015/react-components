@@ -415,6 +415,69 @@
     width: 640
   };
 
+  class NumberInput extends React.PureComponent {
+    constructor(props) {
+      super(props);
+
+      const { initialValue } = this.props;
+      this.state = { value: initialValue };
+
+      this.handleBlur = this.handleBlurFunction.bind(this);
+      this.handleChange = this.handleChangeFunction.bind(this);
+    }
+
+    handleBlurFunction() {
+      const { onBlur } = this.props;
+      const { value } = this.state;
+      const myValue = Number(value);
+
+      onBlur(myValue);
+    }
+
+    handleChangeFunction(event) {
+      const { value } = event.target;
+      const myValue = Number(value);
+
+      this.setState({ value: myValue });
+    }
+
+    render() {
+      const { className, id, initialValue, max, min, step } = this.props;
+
+      return ReactDOMFactories.input({
+        id,
+        type: "number",
+        className,
+        defaultValue: initialValue,
+        max,
+        min,
+        step,
+        onBlur: this.handleBlur,
+        onChange: this.handleChange,
+      });
+    }
+  }
+
+  NumberInput.propTypes = {
+    onBlur: PropTypes.func.isRequired,
+
+    id: PropTypes.string,
+    className: PropTypes.string,
+    initialValue: PropTypes.number,
+    max: PropTypes.number,
+    min: PropTypes.number,
+    step: PropTypes.number,
+  };
+
+  NumberInput.defaultProps = {
+    id: "numberInput",
+    className: undefined,
+    initialValue: 0,
+    max: undefined,
+    min: undefined,
+    step: undefined,
+  };
+
   /*
    * Provides a React component which emulates a Java
    * <a href="http://docs.oracle.com/javase/6/docs/api/javax/swing/JOptionPane.html">JOptionPane</a>.
@@ -576,6 +639,103 @@
     selected: PropTypes.string.isRequired,
   };
 
+  const createOption = (key, label) => ReactDOMFactories.option({ key, value: key }, label);
+
+  class Select extends React.PureComponent {
+    constructor(props) {
+      super(props);
+
+      this.handleChange = this.handleChangeFunction.bind(this);
+    }
+
+    handleChangeFunction() {
+      const { id, onChange } = this.props;
+      const valueSelect = document.getElementById(id);
+      const selected = valueSelect.options[valueSelect.selectedIndex].value;
+      onChange(selected);
+    }
+
+    render() {
+      const { id, values, initialValue } = this.props;
+      const options = R.map((value) => createOption(value.key, value.label), values);
+
+      return ReactDOMFactories.select(
+        { id, defaultValue: initialValue, onChange: this.handleChange },
+        options
+      );
+    }
+  }
+
+  Select.propTypes = {
+    values: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+      })
+    ).isRequired,
+    onChange: PropTypes.func.isRequired,
+
+    id: PropTypes.string,
+    initialValue: PropTypes.string,
+  };
+
+  Select.defaultProps = {
+    id: "select",
+    initialValue: undefined,
+  };
+
+  class StringInput extends React.PureComponent {
+    constructor(props) {
+      super(props);
+
+      const { initialValue } = this.props;
+      this.state = { value: initialValue };
+
+      this.handleBlur = this.handleBlurFunction.bind(this);
+      this.handleChange = this.handleChangeFunction.bind(this);
+    }
+
+    handleBlurFunction() {
+      const { onBlur } = this.props;
+      const { value } = this.state;
+
+      onBlur(value);
+    }
+
+    handleChangeFunction(event) {
+      const { value } = event.target;
+
+      this.setState({ value });
+    }
+
+    render() {
+      const { className, id, initialValue } = this.props;
+
+      return ReactDOMFactories.input({
+        id,
+        type: "text",
+        className,
+        defaultValue: initialValue,
+        onBlur: this.handleBlur,
+        onChange: this.handleChange,
+      });
+    }
+  }
+
+  StringInput.propTypes = {
+    onBlur: PropTypes.func.isRequired,
+
+    id: PropTypes.string,
+    className: PropTypes.string,
+    initialValue: PropTypes.string,
+  };
+
+  StringInput.defaultProps = {
+    id: "stringInput",
+    className: undefined,
+    initialValue: "",
+  };
+
   class TitledElement extends React.Component {
     render() {
       const { className, element, elementClass, title, titleClass } = this.props;
@@ -609,9 +769,12 @@
   ReactComponent.CheckboxPanel = CheckboxPanel;
   ReactComponent.CollapsiblePane = CollapsiblePane;
   ReactComponent.LayeredCanvas = LayeredCanvas;
+  ReactComponent.NumberInput = NumberInput;
   ReactComponent.OptionPane = OptionPane;
   ReactComponent.RadioButtonPanel = RadioButtonPanel;
   ReactComponent.ReactUtilities = ReactUtilities;
+  ReactComponent.Select = Select;
+  ReactComponent.StringInput = StringInput;
   ReactComponent.TitledElement = TitledElement;
 
   Object.freeze(ReactComponent);
