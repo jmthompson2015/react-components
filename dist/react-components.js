@@ -1,8 +1,8 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.ReactComponent = factory());
-}(this, function () { 'use strict';
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.ReactComponent = factory());
+}(this, (function () { 'use strict';
 
   class Checkbox extends React.PureComponent {
     constructor(props) {
@@ -618,4 +618,4 @@
 
   return ReactComponent;
 
-}));
+})));
