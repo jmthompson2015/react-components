@@ -15,13 +15,15 @@ class Select extends React.PureComponent {
   }
 
   render() {
-    const { id, values, initialValue } = this.props;
+    const { attributes, id, initialValue, values } = this.props;
+    const myAttributes = R.pipe(
+      R.assoc("id", id),
+      R.assoc("defaultValue", initialValue),
+      R.assoc("onChange", this.handleChange)
+    )(attributes);
     const options = R.map((value) => createOption(value.key, value.label), values);
 
-    return ReactDOMFactories.select(
-      { id, defaultValue: initialValue, onChange: this.handleChange },
-      options
-    );
+    return ReactDOMFactories.select(myAttributes, options);
   }
 }
 
@@ -34,11 +36,13 @@ Select.propTypes = {
   ).isRequired,
   onChange: PropTypes.func.isRequired,
 
+  attributes: PropTypes.shape(),
   id: PropTypes.string,
   initialValue: PropTypes.string,
 };
 
 Select.defaultProps = {
+  attributes: {},
   id: "select",
   initialValue: undefined,
 };
