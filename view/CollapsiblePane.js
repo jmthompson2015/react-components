@@ -20,14 +20,14 @@ class CollapsiblePane extends React.Component {
   createHeaderCell() {
     const { header, headerClass } = this.props;
     const { isExpanded } = this.state;
-    const headerCell = RU.createCell(header, "headerCell", headerClass);
+    const headerCell = RU.createCell(header, "headerCell", "v-mid");
     const expandLabel = isExpanded ? "\u25B6" : "\u25BC";
     const expandControl = ReactDOMFactories.div(
-      { key: "expandCell", onClick: this.toggleExpand },
+      { key: "expandCell", className: "dtc fr v-mid", onClick: this.toggleExpand },
       expandLabel
     );
     const row = RU.createRow([headerCell, expandControl], "headerExpandRow");
-    const table = RU.createTable(row, "headerExpandTable", "w-100");
+    const table = RU.createTable(row, "headerExpandTable", `${headerClass} w-100`);
 
     return RU.createCell(table, "headerCell");
   }
@@ -56,14 +56,14 @@ CollapsiblePane.propTypes = {
   className: PropTypes.string,
   header: PropTypes.string,
   headerClass: PropTypes.string,
-  isExpanded: PropTypes.bool
+  isExpanded: PropTypes.bool,
 };
 
 CollapsiblePane.defaultProps = {
   className: "bg-light-gray ma1",
   header: undefined,
-  headerClass: "b f5 ph1 pt1 tc",
-  isExpanded: true
+  headerClass: "b f5 ph1 pt1 tl",
+  isExpanded: true,
 };
 
 export default CollapsiblePane;

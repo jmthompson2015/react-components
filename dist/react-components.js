@@ -256,14 +256,14 @@
     createHeaderCell() {
       const { header, headerClass } = this.props;
       const { isExpanded } = this.state;
-      const headerCell = ReactUtilities.createCell(header, "headerCell", headerClass);
+      const headerCell = ReactUtilities.createCell(header, "headerCell", "v-mid");
       const expandLabel = isExpanded ? "\u25B6" : "\u25BC";
       const expandControl = ReactDOMFactories.div(
-        { key: "expandCell", onClick: this.toggleExpand },
+        { key: "expandCell", className: "dtc fr v-mid", onClick: this.toggleExpand },
         expandLabel
       );
       const row = ReactUtilities.createRow([headerCell, expandControl], "headerExpandRow");
-      const table = ReactUtilities.createTable(row, "headerExpandTable", "w-100");
+      const table = ReactUtilities.createTable(row, "headerExpandTable", `${headerClass} w-100`);
 
       return ReactUtilities.createCell(table, "headerCell");
     }
@@ -292,14 +292,14 @@
     className: PropTypes.string,
     header: PropTypes.string,
     headerClass: PropTypes.string,
-    isExpanded: PropTypes.bool
+    isExpanded: PropTypes.bool,
   };
 
   CollapsiblePane.defaultProps = {
     className: "bg-light-gray ma1",
     header: undefined,
-    headerClass: "b f5 ph1 pt1 tc",
-    isExpanded: true
+    headerClass: "b f5 ph1 pt1 tl",
+    isExpanded: true,
   };
 
   /* eslint no-console: ["error", { allow: ["log"] }] */
