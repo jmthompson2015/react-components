@@ -54,9 +54,7 @@
 
   const ReactUtilities = {};
 
-  const merge = (obj1, obj2) => {
-    return { ...obj1, ...obj2 };
-  };
+  const merge = (obj1, obj2) => ({ ...obj1, ...obj2 });
 
   ReactUtilities.createButton = (element, key, className, props = {}) => {
     const obj2 = { key, className };
@@ -82,7 +80,7 @@
   ReactUtilities.createFlexboxWrap = (cells, key, className, props = {}) => {
     const obj2 = {
       key,
-      className: `flex flex-wrap${className ? ` ${className}` : ""}`
+      className: `flex flex-wrap${className ? ` ${className}` : ""}`,
     };
     const newProps = merge(props, obj2);
 
