@@ -244,26 +244,29 @@
     }
 
     createElementCell() {
-      const { element } = this.props;
+      const { element, elementClass } = this.props;
       const { isExpanded } = this.state;
       const className = isExpanded ? "dtc pa1 v-mid" : "dn";
 
-      return ReactDOMFactories.div({ key: "elementCell", className }, element);
+      return ReactDOMFactories.div(
+        { key: "elementCell", className: `${elementClass} ${className}` },
+        element
+      );
     }
 
-    createHeaderCell() {
-      const { header, headerClass } = this.props;
+    createTitleCell() {
+      const { title, titleClass } = this.props;
       const { isExpanded } = this.state;
-      const headerCell = ReactUtilities.createCell(header, "headerCell", "v-mid");
+      const titleCell = ReactUtilities.createCell(title, "titleCell", "v-mid");
       const expandLabel = isExpanded ? "\u25B6" : "\u25BC";
       const expandControl = ReactDOMFactories.div(
         { key: "expandCell", className: "dtc fr v-mid", onClick: this.toggleExpand },
         expandLabel
       );
-      const row = ReactUtilities.createRow([headerCell, expandControl], "headerExpandRow");
-      const table = ReactUtilities.createTable(row, "headerExpandTable", `${headerClass} w-100`);
+      const row = ReactUtilities.createRow([titleCell, expandControl], "titleExpandRow");
+      const table = ReactUtilities.createTable(row, "titleExpandTable", `w-100`);
 
-      return ReactUtilities.createCell(table, "headerCell");
+      return ReactUtilities.createCell(table, "titleCell", titleClass);
     }
 
     toggleExpandFunction() {
@@ -275,10 +278,10 @@
     render() {
       const { className } = this.props;
 
-      const headerCell = this.createHeaderCell();
+      const titleCell = this.createTitleCell();
       const elementCell = this.createElementCell();
 
-      const rows = [ReactUtilities.createRow(headerCell, "headerRow"), ReactUtilities.createRow(elementCell, "elementRow")];
+      const rows = [ReactUtilities.createRow(titleCell, "titleRow"), ReactUtilities.createRow(elementCell, "elementRow")];
 
       return ReactUtilities.createTable(rows, "collapsiblePaneTable", className);
     }
@@ -286,18 +289,19 @@
 
   CollapsiblePane.propTypes = {
     element: PropTypes.shape().isRequired,
+    title: PropTypes.string.isRequired,
 
     className: PropTypes.string,
-    header: PropTypes.string,
-    headerClass: PropTypes.string,
+    elementClass: PropTypes.string,
     isExpanded: PropTypes.bool,
+    titleClass: PropTypes.string,
   };
 
   CollapsiblePane.defaultProps = {
     className: "bg-light-gray ma1",
-    header: undefined,
-    headerClass: "b f5 ph1 pt1 tl",
-    isExpanded: true,
+    elementClass: "ma0 tc v-mid",
+    isExpanded: false,
+    titleClass: "b f5 ph1 pt1 tl",
   };
 
   /* eslint no-console: ["error", { allow: ["log"] }] */
@@ -489,34 +493,51 @@
       this.state = { input: initialInput };
     }
 
-    render() {
-      const {
-        buttons,
-        buttonsClass,
-        icon,
-        message,
-        messageClass,
-        panelClass,
-        title,
-        titleClass
-      } = this.props;
-      const rows = [];
+    createButtonsCell() {
+      const { buttons, buttonsClass } = this.props;
 
-      const cell0 = ReactDOMFactories.td({ colSpan: 2, className: titleClass }, title);
-      rows.push(ReactDOMFactories.tr({ key: 0 }, cell0));
+      return ReactDOMFactories.td({ colSpan: 2, className: buttonsClass }, buttons);
+    }
+
+    createInputCell() {
+      const { inputClass } = this.props;
+      const { input } = this.state;
+
+      return ReactDOMFactories.td({ className: inputClass }, input);
+    }
+
+    createMessageCells() {
+      const { icon, message, messageClass } = this.props;
 
       const cell10 = ReactDOMFactories.td({ key: 0, rowSpan: 2 }, icon);
       const cell11 = ReactDOMFactories.td({ key: 1, className: messageClass }, message);
-      rows.push(ReactDOMFactories.tr({ key: 1 }, [cell10, cell11]));
 
-      const { input } = this.state;
-      const cell2 = ReactDOMFactories.td({}, input);
-      rows.push(ReactDOMFactories.tr({ key: 2 }, cell2));
+      return [cell10, cell11];
+    }
 
-      const cell3 = ReactDOMFactories.td({ colSpan: 2, className: buttonsClass }, buttons);
-      rows.push(ReactDOMFactories.tr({ key: 3 }, cell3));
+    createTitleCell() {
+      const { title, titleClass } = this.props;
 
-      return ReactDOMFactories.table({ className: panelClass }, ReactDOMFactories.tbody({}, rows));
+      return ReactDOMFactories.td({ colSpan: 2, className: titleClass }, title);
+    }
+
+    render() {
+      const { className } = this.props;
+
+      const cell0 = this.createTitleCell();
+      const cells1 = this.createMessageCells();
+      const cell2 = this.createInputCell();
+      const cell3 = this.createButtonsCell();
+
+      const rows = [
+        ReactDOMFactories.tr({ key: "row0" }, cell0),
+        ReactDOMFactories.tr({ key: "row1" }, cells1),
+        ReactDOMFactories.tr({ key: "row2" }, cell2),
+        ReactDOMFactories.tr({ key: "row3" }, cell3),
+      ];
+      const tbody = ReactDOMFactories.tbody({}, rows);
+
+      return ReactDOMFactories.table({ className }, tbody);
     }
   }
 
@@ -526,20 +547,22 @@
     title: PropTypes.string.isRequired,
 
     buttonsClass: PropTypes.string,
+    className: PropTypes.string,
     icon: PropTypes.shape(),
     initialInput: PropTypes.shape(),
+    inputClass: PropTypes.string,
     messageClass: PropTypes.string,
-    panelClass: PropTypes.string,
-    titleClass: PropTypes.string
+    titleClass: PropTypes.string,
   };
 
   OptionPane.defaultProps = {
     buttonsClass: "pa2 tr",
+    className: "ba center v-top",
     icon: undefined,
     initialInput: undefined,
+    inputClass: "",
     messageClass: "",
-    panelClass: "ba center v-top",
-    titleClass: "b bg-light-gray f4 tc"
+    titleClass: "b bg-light-gray f4 tc",
   };
 
   class RadioButton extends React.PureComponent {
@@ -739,11 +762,23 @@
   };
 
   class TitledElement extends React.Component {
-    render() {
-      const { className, element, elementClass, title, titleClass } = this.props;
+    createTitleCell() {
+      const { title, titleClass } = this.props;
 
-      const titleCell = ReactUtilities.createCell(title, "titleCell", titleClass);
-      const elementCell = ReactUtilities.createCell(element, "elementCell", elementClass);
+      return ReactUtilities.createCell(title, "titleCell", titleClass);
+    }
+
+    createElementCell() {
+      const { element, elementClass } = this.props;
+
+      return ReactUtilities.createCell(element, "elementCell", elementClass);
+    }
+
+    render() {
+      const { className } = this.props;
+
+      const titleCell = this.createTitleCell();
+      const elementCell = this.createElementCell();
 
       const rows = [ReactUtilities.createRow(titleCell, "titleRow"), ReactUtilities.createRow(elementCell, "elementRow")];
 
@@ -757,13 +792,13 @@
 
     className: PropTypes.string,
     elementClass: PropTypes.string,
-    titleClass: PropTypes.string
+    titleClass: PropTypes.string,
   };
 
   TitledElement.defaultProps = {
     className: "bg-light-gray ma1",
     elementClass: "ma0 tc v-mid",
-    titleClass: "b f5 ph1 pt1 tc"
+    titleClass: "b f5 ph1 pt1 tc",
   };
 
   const ReactComponent = {};

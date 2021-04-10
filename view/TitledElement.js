@@ -1,11 +1,23 @@
 import RU from "./ReactUtilities.js";
 
 class TitledElement extends React.Component {
-  render() {
-    const { className, element, elementClass, title, titleClass } = this.props;
+  createTitleCell() {
+    const { title, titleClass } = this.props;
 
-    const titleCell = RU.createCell(title, "titleCell", titleClass);
-    const elementCell = RU.createCell(element, "elementCell", elementClass);
+    return RU.createCell(title, "titleCell", titleClass);
+  }
+
+  createElementCell() {
+    const { element, elementClass } = this.props;
+
+    return RU.createCell(element, "elementCell", elementClass);
+  }
+
+  render() {
+    const { className } = this.props;
+
+    const titleCell = this.createTitleCell();
+    const elementCell = this.createElementCell();
 
     const rows = [RU.createRow(titleCell, "titleRow"), RU.createRow(elementCell, "elementRow")];
 
@@ -19,13 +31,13 @@ TitledElement.propTypes = {
 
   className: PropTypes.string,
   elementClass: PropTypes.string,
-  titleClass: PropTypes.string
+  titleClass: PropTypes.string,
 };
 
 TitledElement.defaultProps = {
   className: "bg-light-gray ma1",
   elementClass: "ma0 tc v-mid",
-  titleClass: "b f5 ph1 pt1 tc"
+  titleClass: "b f5 ph1 pt1 tc",
 };
 
 export default TitledElement;
