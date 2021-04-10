@@ -2,64 +2,44 @@
 
 import RadioButton from "./RadioButton.js";
 
-const items = [
-  {
-    key: "name",
-    label: "Name",
-  },
-  {
-    key: "red",
-    label: "Red",
-  },
-  {
-    key: "green",
-    label: "Green",
-  },
-  {
-    key: "blue",
-    label: "Blue",
-  },
-  {
-    key: "liked",
-    label: "Liked",
-  },
-];
-
-const myOnChange = (itemKey, isChecked) => {
-  console.log(`myOnChange() itemKey = ${itemKey} isChecked ? ${isChecked}`);
+const onChange = (item, isChecked) => {
+  console.log(`myOnChange() item = ${JSON.stringify(item)} isChecked ? ${isChecked}`);
 };
 
+// /////////////////////////////////////////////////////////////////////////////
+// string
 const element0 = React.createElement(RadioButton, {
-  item: items[0], // Name
+  item: "String",
   isChecked: true,
-  onChange: myOnChange,
+  onChange,
 });
 ReactDOM.render(element0, document.getElementById("panel0"));
 
+// /////////////////////////////////////////////////////////////////////////////
+// number
 const element1 = React.createElement(RadioButton, {
-  item: items[1], // Red
-  isChecked: false,
-  onChange: myOnChange,
+  item: 1,
+  onChange,
 });
 ReactDOM.render(element1, document.getElementById("panel1"));
 
+// /////////////////////////////////////////////////////////////////////////////
+// object
+const item2 = {
+  key: "red",
+  label: "Red",
+};
+
+const labelFunction2 = (item) => {
+  const className = `v-mid ${item.key === "red" ? " bg-red" : ""}`;
+
+  return ReactDOMFactories.span({ className }, item.label);
+};
+
 const element2 = React.createElement(RadioButton, {
-  item: items[2], // Green
-  isChecked: false,
-  onChange: myOnChange,
+  item: item2,
+  isChecked: true,
+  labelFunction: labelFunction2,
+  onChange,
 });
 ReactDOM.render(element2, document.getElementById("panel2"));
-
-const element3 = React.createElement(RadioButton, {
-  item: items[3], // Blue
-  isChecked: false,
-  onChange: myOnChange,
-});
-ReactDOM.render(element3, document.getElementById("panel3"));
-
-const element4 = React.createElement(RadioButton, {
-  item: items[4], // Liked
-  isChecked: false,
-  onChange: myOnChange,
-});
-ReactDOM.render(element4, document.getElementById("panel4"));

@@ -7,7 +7,7 @@ const myOnClick = () => {
   console.log(`myOnClick()`);
 };
 
-const drawFunction1 = fillStyle => (context0, width, height) => {
+const drawFunction1 = (fillStyle) => (context0, width, height) => {
   const context = context0;
   context.save();
   context.beginPath();
@@ -16,7 +16,7 @@ const drawFunction1 = fillStyle => (context0, width, height) => {
   context.fill();
   context.restore();
 };
-const drawFunction2 = count => (context0, width, height) => {
+const drawFunction2 = (count) => (context0, width, height) => {
   if (count > 1) {
     const context = context0;
     context.save();
@@ -27,7 +27,7 @@ const drawFunction2 = count => (context0, width, height) => {
     context.restore();
   }
 };
-const drawFunction3 = count => (context0, width, height) => {
+const drawFunction3 = (count) => (context0, width, height) => {
   if (count > 1) {
     const context = context0;
     context.save();
@@ -40,7 +40,7 @@ const drawFunction3 = count => (context0, width, height) => {
 };
 
 const size = 75;
-const mapFunction = count => {
+const mapFunction = (count) => {
   let fillStyle;
   switch (count) {
     case 1:
@@ -63,8 +63,8 @@ const mapFunction = count => {
     height: size,
     isVerbose: true,
     onClick: myOnClick,
-    title: count,
-    width: size
+    title: `${count}`,
+    width: size,
   });
 
   return RU.createCell(canvas, count);

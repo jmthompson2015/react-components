@@ -29,12 +29,7 @@ class Checkbox extends React.PureComponent {
 }
 
 Checkbox.propTypes = {
-  item: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.shape(),
-    PropTypes.arrayOf(),
-  ]).isRequired,
+  item: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()]).isRequired,
   onChange: PropTypes.func.isRequired,
 
   isChecked: PropTypes.bool,

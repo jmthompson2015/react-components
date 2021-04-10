@@ -44,22 +44,3 @@ const element2 = React.createElement(Checkbox, {
   onChange,
 });
 ReactDOM.render(element2, document.getElementById("panel2"));
-
-// /////////////////////////////////////////////////////////////////////////////
-// array
-const item3 = [1, "two", 3, "four"];
-
-const labelFunction3 = (item) => {
-  const className = "v-mid";
-  const value = `[${item.join(", ")}]`;
-
-  return ReactDOMFactories.span({ className }, value);
-};
-
-const element3 = React.createElement(Checkbox, {
-  item: item3,
-  isChecked: false,
-  labelFunction: labelFunction3,
-  onChange,
-});
-ReactDOM.render(element3, document.getElementById("panel3"));

@@ -3,7 +3,9 @@
 import CheckboxPanel from "./CheckboxPanel.js";
 
 const applyOnClick = (selectedItems) => {
-  console.log(`applyOnClick() selectedItems = ${JSON.stringify(selectedItems)}`);
+  console.log(
+    `applyOnClick() selectedItems = ${JSON.stringify(selectedItems)} ${typeof selectedItems}`
+  );
 };
 
 // /////////////////////////////////////////////////////////////////////////////
@@ -75,28 +77,3 @@ const element2 = React.createElement(CheckboxPanel, {
   useSelectButtons: true,
 });
 ReactDOM.render(element2, document.getElementById("panel2"));
-
-// /////////////////////////////////////////////////////////////////////////////
-// Objects
-const items3 = [
-  ["one", "two", "three"],
-  [1, 2, 3],
-  ["red", "green", "blue"],
-];
-
-const labelFunction3 = (item) => {
-  const className = "v-mid";
-  const value = `[${item.join(", ")}]`;
-
-  return ReactDOMFactories.span({ className }, value);
-};
-
-const selectedItems3 = [items3[1]];
-const element3 = React.createElement(CheckboxPanel, {
-  applyOnClick,
-  items: items3,
-  labelFunction: labelFunction3,
-  selectedItems: selectedItems3,
-  useSelectButtons: true,
-});
-ReactDOM.render(element3, document.getElementById("panel3"));

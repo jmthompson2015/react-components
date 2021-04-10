@@ -1,9 +1,7 @@
 import Checkbox from "./Checkbox.js";
 import RU from "./ReactUtilities.js";
 
-const defaultKeyFunction = (item) => {
-  return typeof item === "object" ? JSON.stringify(item) : item;
-};
+const defaultKeyFunction = (item) => (typeof item === "object" ? JSON.stringify(item) : item);
 
 class CheckboxPanel extends React.PureComponent {
   constructor(props) {
@@ -15,31 +13,6 @@ class CheckboxPanel extends React.PureComponent {
     this.handleChange = this.handleChangeFunction.bind(this);
     this.handleSelectAll = this.handleSelectAllFunction.bind(this);
     this.handleSelectNone = this.handleSelectNoneFunction.bind(this);
-  }
-
-  createButtonTable() {
-    const { useSelectButtons } = this.props;
-    const applyButton = RU.createButton("Apply", "applyButton", undefined, {
-      onClick: this.handleApply,
-    });
-    const applyCell = RU.createCell(applyButton, "applyCell");
-    let cells = applyCell;
-
-    if (useSelectButtons) {
-      const selectAllButton = RU.createButton("Select All", "selectAllButton", undefined, {
-        onClick: this.handleSelectAll,
-      });
-      const selectNoneButton = RU.createButton("Select None", "selectNoneButton", undefined, {
-        onClick: this.handleSelectNone,
-      });
-      const cell0 = RU.createCell(selectAllButton, "selectAllCell");
-      const cell1 = RU.createCell(selectNoneButton, "selectNoneCell");
-      cells = [cell0, cell1, applyCell];
-    }
-
-    const row = RU.createRow(cells, "buttonRow");
-
-    return RU.createTable(row, "buttonTable", "button-table");
   }
 
   handleApplyFunction() {
@@ -72,8 +45,33 @@ class CheckboxPanel extends React.PureComponent {
     this.setState({ selectedItems: [] });
   }
 
+  createButtonTable() {
+    const { useSelectButtons } = this.props;
+    const applyButton = RU.createButton("Apply", "applyButton", undefined, {
+      onClick: this.handleApply,
+    });
+    const applyCell = RU.createCell(applyButton, "applyCell");
+    let cells = applyCell;
+
+    if (useSelectButtons) {
+      const selectAllButton = RU.createButton("Select All", "selectAllButton", undefined, {
+        onClick: this.handleSelectAll,
+      });
+      const selectNoneButton = RU.createButton("Select None", "selectNoneButton", undefined, {
+        onClick: this.handleSelectNone,
+      });
+      const cell0 = RU.createCell(selectAllButton, "selectAllCell");
+      const cell1 = RU.createCell(selectNoneButton, "selectNoneCell");
+      cells = [cell0, cell1, applyCell];
+    }
+
+    const row = RU.createRow(cells, "buttonRow");
+
+    return RU.createTable(row, "buttonTable", "button-table");
+  }
+
   render() {
-    const { items, keyFunction, labelFunction } = this.props;
+    const { className, items, keyFunction, labelFunction } = this.props;
     const { selectedItems } = this.state;
 
     const mapFunction = (item) => {
@@ -99,21 +97,27 @@ class CheckboxPanel extends React.PureComponent {
       RU.createRow(cell1, "buttonRow", "button-row"),
     ];
 
-    return RU.createTable(rows, "checkboxPanel", "checkbox-panel");
+    return RU.createTable(rows, "checkboxPanel", className);
   }
 }
 
 CheckboxPanel.propTypes = {
   applyOnClick: PropTypes.func.isRequired,
-  items: PropTypes.arrayOf().isRequired,
+  items: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
+  ).isRequired,
 
+  className: PropTypes.string,
   keyFunction: PropTypes.func,
   labelFunction: PropTypes.func,
-  selectedItems: PropTypes.arrayOf(),
+  selectedItems: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
+  ),
   useSelectButtons: PropTypes.bool,
 };
 
 CheckboxPanel.defaultProps = {
+  className: undefined,
   keyFunction: defaultKeyFunction,
   labelFunction: undefined,
   selectedItems: [],

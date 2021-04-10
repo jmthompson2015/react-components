@@ -35,12 +35,7 @@
   }
 
   Checkbox.propTypes = {
-    item: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.shape(),
-      PropTypes.arrayOf(),
-    ]).isRequired,
+    item: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()]).isRequired,
     onChange: PropTypes.func.isRequired,
 
     isChecked: PropTypes.bool,
@@ -115,9 +110,7 @@
     return ReactDOMFactories.div(newProps, rows);
   };
 
-  const defaultKeyFunction = (item) => {
-    return typeof item === "object" ? JSON.stringify(item) : item;
-  };
+  const defaultKeyFunction$1 = (item) => (typeof item === "object" ? JSON.stringify(item) : item);
 
   class CheckboxPanel extends React.PureComponent {
     constructor(props) {
@@ -129,31 +122,6 @@
       this.handleChange = this.handleChangeFunction.bind(this);
       this.handleSelectAll = this.handleSelectAllFunction.bind(this);
       this.handleSelectNone = this.handleSelectNoneFunction.bind(this);
-    }
-
-    createButtonTable() {
-      const { useSelectButtons } = this.props;
-      const applyButton = ReactUtilities.createButton("Apply", "applyButton", undefined, {
-        onClick: this.handleApply,
-      });
-      const applyCell = ReactUtilities.createCell(applyButton, "applyCell");
-      let cells = applyCell;
-
-      if (useSelectButtons) {
-        const selectAllButton = ReactUtilities.createButton("Select All", "selectAllButton", undefined, {
-          onClick: this.handleSelectAll,
-        });
-        const selectNoneButton = ReactUtilities.createButton("Select None", "selectNoneButton", undefined, {
-          onClick: this.handleSelectNone,
-        });
-        const cell0 = ReactUtilities.createCell(selectAllButton, "selectAllCell");
-        const cell1 = ReactUtilities.createCell(selectNoneButton, "selectNoneCell");
-        cells = [cell0, cell1, applyCell];
-      }
-
-      const row = ReactUtilities.createRow(cells, "buttonRow");
-
-      return ReactUtilities.createTable(row, "buttonTable", "button-table");
     }
 
     handleApplyFunction() {
@@ -186,8 +154,33 @@
       this.setState({ selectedItems: [] });
     }
 
+    createButtonTable() {
+      const { useSelectButtons } = this.props;
+      const applyButton = ReactUtilities.createButton("Apply", "applyButton", undefined, {
+        onClick: this.handleApply,
+      });
+      const applyCell = ReactUtilities.createCell(applyButton, "applyCell");
+      let cells = applyCell;
+
+      if (useSelectButtons) {
+        const selectAllButton = ReactUtilities.createButton("Select All", "selectAllButton", undefined, {
+          onClick: this.handleSelectAll,
+        });
+        const selectNoneButton = ReactUtilities.createButton("Select None", "selectNoneButton", undefined, {
+          onClick: this.handleSelectNone,
+        });
+        const cell0 = ReactUtilities.createCell(selectAllButton, "selectAllCell");
+        const cell1 = ReactUtilities.createCell(selectNoneButton, "selectNoneCell");
+        cells = [cell0, cell1, applyCell];
+      }
+
+      const row = ReactUtilities.createRow(cells, "buttonRow");
+
+      return ReactUtilities.createTable(row, "buttonTable", "button-table");
+    }
+
     render() {
-      const { items, keyFunction, labelFunction } = this.props;
+      const { className, items, keyFunction, labelFunction } = this.props;
       const { selectedItems } = this.state;
 
       const mapFunction = (item) => {
@@ -213,22 +206,28 @@
         ReactUtilities.createRow(cell1, "buttonRow", "button-row"),
       ];
 
-      return ReactUtilities.createTable(rows, "checkboxPanel", "checkbox-panel");
+      return ReactUtilities.createTable(rows, "checkboxPanel", className);
     }
   }
 
   CheckboxPanel.propTypes = {
     applyOnClick: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf().isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
+    ).isRequired,
 
+    className: PropTypes.string,
     keyFunction: PropTypes.func,
     labelFunction: PropTypes.func,
-    selectedItems: PropTypes.arrayOf(),
+    selectedItems: PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
+    ),
     useSelectButtons: PropTypes.bool,
   };
 
   CheckboxPanel.defaultProps = {
-    keyFunction: defaultKeyFunction,
+    className: undefined,
+    keyFunction: defaultKeyFunction$1,
     labelFunction: undefined,
     selectedItems: [],
     useSelectButtons: false,
@@ -576,88 +575,121 @@
       const { item, onChange } = this.props;
       const { checked } = event.target;
 
-      onChange(item.key, checked);
+      onChange(item, checked);
     }
 
     render() {
-      const { item, isChecked } = this.props;
+      const { item, isChecked, labelFunction } = this.props;
 
       const input = ReactDOMFactories.input({
         key: `${item.key}${isChecked}`,
+        className: "v-mid",
         type: "radio",
         checked: isChecked,
         onChange: this.handleChange,
-        style: { verticalAlign: "middle" },
       });
-      const labelElement = ReactDOMFactories.span({ style: { verticalAlign: "middle" } }, item.label);
+      const labelElement = labelFunction(item);
 
-      return ReactDOMFactories.label(
-        { style: { display: "block", verticalAlign: "middle" } },
-        input,
-        labelElement
-      );
+      return ReactDOMFactories.label({ className: "db v-mid" }, input, labelElement);
     }
   }
 
   RadioButton.propTypes = {
-    item: PropTypes.shape({
-      key: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-    }).isRequired,
+    item: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()]).isRequired,
     onChange: PropTypes.func.isRequired,
 
     isChecked: PropTypes.bool,
+    labelFunction: PropTypes.func,
   };
 
   RadioButton.defaultProps = {
     isChecked: false,
+    labelFunction: (item) => ReactDOMFactories.span({ className: "v-mid" }, item),
   };
+
+  const defaultKeyFunction = (item) => (typeof item === "object" ? JSON.stringify(item) : item);
 
   class RadioButtonPanel extends React.PureComponent {
     constructor(props) {
       super(props);
 
-      const { selected } = this.props;
-      this.state = { selected };
+      const { selectedItem } = this.props;
+      this.state = { selectedItem };
+      this.handleApply = this.handleApplyFunction.bind(this);
       this.handleChange = this.handleChangeFunction.bind(this);
     }
 
-    handleChangeFunction(itemKey) {
-      this.setState({ selected: itemKey });
-
+    handleApplyFunction() {
       const { applyOnClick } = this.props;
-      applyOnClick(itemKey);
+      const { selectedItem } = this.state;
+
+      applyOnClick(selectedItem);
+    }
+
+    handleChangeFunction(item) {
+      this.setState({ selectedItem: item });
+    }
+
+    createButtonTable() {
+      const applyButton = ReactUtilities.createButton("Apply", "applyButton", undefined, {
+        onClick: this.handleApply,
+      });
+      const applyCell = ReactUtilities.createCell(applyButton, "applyCell");
+      const cells = applyCell;
+
+      const row = ReactUtilities.createRow(cells, "buttonRow");
+
+      return ReactUtilities.createTable(row, "buttonTable", "button-table");
     }
 
     render() {
-      const { items } = this.props;
-      const { selected } = this.state;
+      const { className, items, keyFunction, labelFunction } = this.props;
+      const { selectedItem } = this.state;
 
       const mapFunction = (item) => {
-        const isChecked = item.key === selected;
+        const isChecked = selectedItem === item;
         const radioButton = React.createElement(RadioButton, {
           item,
           isChecked,
+          labelFunction,
           onChange: this.handleChange,
         });
         const cell = ReactUtilities.createCell(radioButton);
-        return ReactUtilities.createRow(cell, item.key);
+        return ReactUtilities.createRow(cell, keyFunction(item));
       };
       const radioButtons = items.map(mapFunction);
+      const table = ReactUtilities.createTable(radioButtons, "radioButtonTable", "radio-button-table");
+      const scrollPane = ReactDOMFactories.div({ className: "scroll-pane" }, table);
 
-      return ReactUtilities.createTable(radioButtons, "radioButtonTable", "radio-button-table");
+      const cell0 = ReactUtilities.createCell(scrollPane, "radioButtonCell", "radio-button-cell");
+      const cell1 = ReactUtilities.createCell(this.createButtonTable(), "buttonCell", "button-cell");
+
+      const rows = [
+        ReactUtilities.createRow(cell0, "radioButtonRow", "radio-button-row"),
+        ReactUtilities.createRow(cell1, "buttonRow", "button-row"),
+      ];
+
+      return ReactUtilities.createTable(rows, "radioButtonPanel", className);
     }
   }
 
   RadioButtonPanel.propTypes = {
     applyOnClick: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(
-      PropTypes.shape({
-        key: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
-      })
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
     ).isRequired,
-    selected: PropTypes.string.isRequired,
+
+    className: PropTypes.string,
+    keyFunction: PropTypes.func,
+    labelFunction: PropTypes.func,
+    selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()]),
+  };
+
+  RadioButtonPanel.defaultProps = {
+    className: undefined,
+    keyFunction: defaultKeyFunction,
+    labelFunction: undefined,
+    selectedItem: undefined,
   };
 
   const createOption = (key, label) => ReactDOMFactories.option({ key, value: key }, label);
