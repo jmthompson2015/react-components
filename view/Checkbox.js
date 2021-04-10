@@ -17,7 +17,7 @@ class Checkbox extends React.PureComponent {
 
     const input = ReactDOMFactories.input({
       key: `${item.key}${isChecked}`,
-      className: "v-mid",
+      className: "mr1 v-mid",
       type: "checkbox",
       checked: isChecked,
       onChange: this.handleChange,

@@ -37,29 +37,36 @@ class RadioButtonPanel extends React.PureComponent {
   }
 
   render() {
-    const { className, items, keyFunction, labelFunction } = this.props;
+    const {
+      buttonPanelClass,
+      className,
+      inputPanelClass,
+      items,
+      keyFunction,
+      labelFunction,
+    } = this.props;
     const { selectedItem } = this.state;
 
     const mapFunction = (item) => {
       const isChecked = selectedItem === item;
-      const radioButton = React.createElement(RadioButton, {
+      const input = React.createElement(RadioButton, {
         item,
         isChecked,
         labelFunction,
         onChange: this.handleChange,
       });
-      const cell = RU.createCell(radioButton);
+      const cell = RU.createCell(input);
       return RU.createRow(cell, keyFunction(item));
     };
-    const radioButtons = items.map(mapFunction);
-    const table = RU.createTable(radioButtons, "radioButtonTable", "radio-button-table");
+    const inputs = items.map(mapFunction);
+    const table = RU.createTable(inputs, "inputsTable", "inputs-table");
     const scrollPane = ReactDOMFactories.div({ className: "scroll-pane" }, table);
 
-    const cell0 = RU.createCell(scrollPane, "radioButtonCell", "radio-button-cell");
-    const cell1 = RU.createCell(this.createButtonTable(), "buttonCell", "button-cell");
+    const cell0 = RU.createCell(scrollPane, "inputsCell", inputPanelClass);
+    const cell1 = RU.createCell(this.createButtonTable(), "buttonPanelCell", buttonPanelClass);
 
     const rows = [
-      RU.createRow(cell0, "radioButtonRow", "radio-button-row"),
+      RU.createRow(cell0, "inputRow", "input-row"),
       RU.createRow(cell1, "buttonRow", "button-row"),
     ];
 
@@ -73,14 +80,18 @@ RadioButtonPanel.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
   ).isRequired,
 
+  buttonPanelClass: PropTypes.string,
   className: PropTypes.string,
+  inputPanelClass: PropTypes.string,
   keyFunction: PropTypes.func,
   labelFunction: PropTypes.func,
   selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()]),
 };
 
 RadioButtonPanel.defaultProps = {
+  buttonPanelClass: "fr pt1",
   className: undefined,
+  inputPanelClass: "bg-white tl",
   keyFunction: defaultKeyFunction,
   labelFunction: undefined,
   selectedItem: undefined,

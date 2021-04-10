@@ -71,29 +71,36 @@ class CheckboxPanel extends React.PureComponent {
   }
 
   render() {
-    const { className, items, keyFunction, labelFunction } = this.props;
+    const {
+      buttonPanelClass,
+      className,
+      inputPanelClass,
+      items,
+      keyFunction,
+      labelFunction,
+    } = this.props;
     const { selectedItems } = this.state;
 
     const mapFunction = (item) => {
       const isChecked = selectedItems.includes(item);
-      const checkbox = React.createElement(Checkbox, {
+      const input = React.createElement(Checkbox, {
         item,
         isChecked,
         labelFunction,
         onChange: this.handleChange,
       });
-      const cell = RU.createCell(checkbox);
+      const cell = RU.createCell(input);
       return RU.createRow(cell, keyFunction(item));
     };
-    const checkboxes = items.map(mapFunction);
-    const table = RU.createTable(checkboxes, "checkboxesTable", "checkboxes-table");
+    const inputs = items.map(mapFunction);
+    const table = RU.createTable(inputs, "inputsTable", "inputs-table");
     const scrollPane = ReactDOMFactories.div({ className: "scroll-pane" }, table);
 
-    const cell0 = RU.createCell(scrollPane, "checkboxesCell", "checkboxes-cell");
-    const cell1 = RU.createCell(this.createButtonTable(), "buttonCell", "button-cell");
+    const cell0 = RU.createCell(scrollPane, "inputsCell", inputPanelClass);
+    const cell1 = RU.createCell(this.createButtonTable(), "buttonPanelCell", buttonPanelClass);
 
     const rows = [
-      RU.createRow(cell0, "checkboxRow", "checkbox-row"),
+      RU.createRow(cell0, "inputRow", "input-row"),
       RU.createRow(cell1, "buttonRow", "button-row"),
     ];
 
@@ -107,7 +114,9 @@ CheckboxPanel.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
   ).isRequired,
 
+  buttonPanelClass: PropTypes.string,
   className: PropTypes.string,
+  inputPanelClass: PropTypes.string,
   keyFunction: PropTypes.func,
   labelFunction: PropTypes.func,
   selectedItems: PropTypes.arrayOf(
@@ -117,7 +126,9 @@ CheckboxPanel.propTypes = {
 };
 
 CheckboxPanel.defaultProps = {
+  buttonPanelClass: "fr pt1",
   className: undefined,
+  inputPanelClass: "bg-white tl",
   keyFunction: defaultKeyFunction,
   labelFunction: undefined,
   selectedItems: [],

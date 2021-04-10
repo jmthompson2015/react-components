@@ -63,9 +63,9 @@ const labelFunction2 = (item) => {
     green: "bg-green",
     blue: "bg-blue",
   };
-  const className = `v-mid ${keyToClass[item.key]}`;
+  const className3 = `v-mid ${keyToClass[item.key]}`;
 
-  return ReactDOMFactories.span({ className }, item.label);
+  return ReactDOMFactories.span({ className: className3 }, item.label);
 };
 
 const selectedItems2 = [items2[0], items2[2], items2[4]];

@@ -75,11 +75,11 @@ OptionPane.propTypes = {
 
 OptionPane.defaultProps = {
   buttonsClass: "pa2 tr",
-  className: "ba center v-top",
+  className: "ba bg-white center v-top",
   icon: undefined,
   initialInput: undefined,
-  inputClass: "",
-  messageClass: "",
+  inputClass: undefined,
+  messageClass: undefined,
   titleClass: "b bg-light-gray f4 tc",
 };
 
