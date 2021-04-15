@@ -235,7 +235,7 @@
   };
 
   CheckboxPanel.defaultProps = {
-    buttonPanelClass: "fr pt2",
+    buttonPanelClass: "fr pt1",
     className: undefined,
     inputPanelClass: "bg-white tl",
     keyFunction: defaultKeyFunction$1,
@@ -312,6 +312,30 @@
     elementClass: "ma0 tc v-mid",
     isExpanded: false,
     titleClass: "b f5 ph1 pt1 tl",
+  };
+
+  class ColorSwatch extends React.PureComponent {
+    render() {
+      const { className, color } = this.props;
+      const backgroundColor = `rgb(${color.r}, ${color.g}, ${color.b})`;
+      const key = `colorSwatch-${color.r},${color.g},${color.b}`;
+
+      return ReactDOMFactories.div({ key, className, style: { backgroundColor } });
+    }
+  }
+
+  ColorSwatch.propTypes = {
+    color: PropTypes.shape({
+      r: PropTypes.number,
+      g: PropTypes.number,
+      b: PropTypes.number,
+    }).isRequired,
+
+    className: PropTypes.string,
+  };
+
+  ColorSwatch.defaultProps = {
+    className: "h-100 w-100",
   };
 
   /* eslint no-console: ["error", { allow: ["log"] }] */
@@ -706,7 +730,7 @@
   };
 
   RadioButtonPanel.defaultProps = {
-    buttonPanelClass: "fr pt2",
+    buttonPanelClass: "fr pt1",
     className: undefined,
     inputPanelClass: "bg-white tl",
     keyFunction: defaultKeyFunction,
@@ -859,6 +883,7 @@
 
   ReactComponent.CheckboxPanel = CheckboxPanel;
   ReactComponent.CollapsiblePane = CollapsiblePane;
+  ReactComponent.ColorSwatch = ColorSwatch;
   ReactComponent.LayeredCanvas = LayeredCanvas;
   ReactComponent.NumberInput = NumberInput;
   ReactComponent.OptionPane = OptionPane;

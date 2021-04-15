@@ -1,5 +1,6 @@
 import CheckboxPanel from "./view/CheckboxPanel.js";
 import CollapsiblePane from "./view/CollapsiblePane.js";
+import ColorSwatch from "./view/ColorSwatch.js";
 import LayeredCanvas from "./view/LayeredCanvas.js";
 import NumberInput from "./view/NumberInput.js";
 import OptionPane from "./view/OptionPane.js";
@@ -13,6 +14,7 @@ const ReactComponent = {};
 
 ReactComponent.CheckboxPanel = CheckboxPanel;
 ReactComponent.CollapsiblePane = CollapsiblePane;
+ReactComponent.ColorSwatch = ColorSwatch;
 ReactComponent.LayeredCanvas = LayeredCanvas;
 ReactComponent.NumberInput = NumberInput;
 ReactComponent.OptionPane = OptionPane;
