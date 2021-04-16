@@ -316,11 +316,11 @@
 
   class ColorSwatch extends React.PureComponent {
     render() {
-      const { className, color } = this.props;
+      const { className, color, title } = this.props;
       const backgroundColor = `rgb(${color.r}, ${color.g}, ${color.b})`;
       const key = `colorSwatch-${color.r},${color.g},${color.b}`;
 
-      return ReactDOMFactories.div({ key, className, style: { backgroundColor } });
+      return ReactDOMFactories.div({ key, className, style: { backgroundColor }, title });
     }
   }
 
@@ -332,10 +332,12 @@
     }).isRequired,
 
     className: PropTypes.string,
+    title: PropTypes.string,
   };
 
   ColorSwatch.defaultProps = {
     className: "h-100 w-100",
+    title: undefined,
   };
 
   /* eslint no-console: ["error", { allow: ["log"] }] */
