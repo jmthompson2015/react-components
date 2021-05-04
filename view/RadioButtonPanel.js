@@ -3,7 +3,7 @@ import RU from "./ReactUtilities.js";
 
 const defaultKeyFunction = (item) => (typeof item === "object" ? JSON.stringify(item) : item);
 
-class RadioButtonPanel extends React.PureComponent {
+class RadioButtonPanel extends React.Component {
   constructor(props) {
     super(props);
 

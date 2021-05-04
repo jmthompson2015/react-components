@@ -1,6 +1,6 @@
 import RU from "./ReactUtilities.js";
 
-class TitledElement extends React.Component {
+class TitledElement extends React.PureComponent {
   createTitleCell() {
     const { title, titleClass } = this.props;
 

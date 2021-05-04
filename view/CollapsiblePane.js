@@ -1,6 +1,6 @@
 import RU from "./ReactUtilities.js";
 
-class CollapsiblePane extends React.Component {
+class CollapsiblePane extends React.PureComponent {
   constructor(props) {
     super(props);
 

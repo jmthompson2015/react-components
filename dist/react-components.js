@@ -112,7 +112,7 @@
 
   const defaultKeyFunction$1 = (item) => (typeof item === "object" ? JSON.stringify(item) : item);
 
-  class CheckboxPanel extends React.PureComponent {
+  class CheckboxPanel extends React.Component {
     constructor(props) {
       super(props);
 
@@ -244,7 +244,7 @@
     useSelectButtons: false,
   };
 
-  class CollapsiblePane extends React.Component {
+  class CollapsiblePane extends React.PureComponent {
     constructor(props) {
       super(props);
 
@@ -351,17 +351,17 @@
         }
         resolve(img);
       });
-      img.addEventListener("error", err => reject(err));
+      img.addEventListener("error", (err) => reject(err));
       img.src = src;
     });
 
   // /////////////////////////////////////////////////////////////////////////////////////////////////
-  class LayeredCanvas extends React.PureComponent {
+  class LayeredCanvas extends React.Component {
     constructor(props) {
       super(props);
 
       this.state = {
-        imageMap: {}
+        imageMap: {},
       };
 
       this.handleOnClick = this.handleOnClickFunction.bind(this);
@@ -386,7 +386,7 @@
       const { images, isVerbose } = this.props;
 
       for (let i = 0; i < images.length; i += 1) {
-        loadImage(images[i], isVerbose).then(img => {
+        loadImage(images[i], isVerbose).then((img) => {
           const { imageMap: oldImageMap } = this.state;
           const newImageMap = { ...oldImageMap };
           newImageMap[images[i]] = img;
@@ -402,7 +402,7 @@
       const canvas = document.getElementById(customKey);
       const context = canvas.getContext("2d");
 
-      const eachFunction = drawFunction => {
+      const eachFunction = (drawFunction) => {
         drawFunction(context, width, height, imageMap);
       };
 
@@ -419,7 +419,7 @@
         onClick: this.handleOnClick,
         style: { backgroundColor },
         title,
-        width
+        width,
       };
       const inputProps = { ...myProps, ...clientProps };
 
@@ -438,7 +438,7 @@
     isVerbose: PropTypes.bool,
     onClick: PropTypes.func,
     title: PropTypes.string,
-    width: PropTypes.number
+    width: PropTypes.number,
   };
 
   LayeredCanvas.defaultProps = {
@@ -450,7 +450,7 @@
     isVerbose: false,
     onClick: () => {},
     title: undefined,
-    width: 640
+    width: 640,
   };
 
   class NumberInput extends React.PureComponent {
@@ -646,7 +646,7 @@
 
   const defaultKeyFunction = (item) => (typeof item === "object" ? JSON.stringify(item) : item);
 
-  class RadioButtonPanel extends React.PureComponent {
+  class RadioButtonPanel extends React.Component {
     constructor(props) {
       super(props);
 
@@ -841,7 +841,7 @@
     initialValue: "",
   };
 
-  class TitledElement extends React.Component {
+  class TitledElement extends React.PureComponent {
     createTitleCell() {
       const { title, titleClass } = this.props;
 

@@ -3,7 +3,7 @@ import RU from "./ReactUtilities.js";
 
 const defaultKeyFunction = (item) => (typeof item === "object" ? JSON.stringify(item) : item);
 
-class CheckboxPanel extends React.PureComponent {
+class CheckboxPanel extends React.Component {
   constructor(props) {
     super(props);
 

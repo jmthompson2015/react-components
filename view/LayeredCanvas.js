@@ -9,17 +9,17 @@ const loadImage = (src, isVerbose) =>
       }
       resolve(img);
     });
-    img.addEventListener("error", err => reject(err));
+    img.addEventListener("error", (err) => reject(err));
     img.src = src;
   });
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
-class LayeredCanvas extends React.PureComponent {
+class LayeredCanvas extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      imageMap: {}
+      imageMap: {},
     };
 
     this.handleOnClick = this.handleOnClickFunction.bind(this);
@@ -44,7 +44,7 @@ class LayeredCanvas extends React.PureComponent {
     const { images, isVerbose } = this.props;
 
     for (let i = 0; i < images.length; i += 1) {
-      loadImage(images[i], isVerbose).then(img => {
+      loadImage(images[i], isVerbose).then((img) => {
         const { imageMap: oldImageMap } = this.state;
         const newImageMap = { ...oldImageMap };
         newImageMap[images[i]] = img;
@@ -60,7 +60,7 @@ class LayeredCanvas extends React.PureComponent {
     const canvas = document.getElementById(customKey);
     const context = canvas.getContext("2d");
 
-    const eachFunction = drawFunction => {
+    const eachFunction = (drawFunction) => {
       drawFunction(context, width, height, imageMap);
     };
 
@@ -77,7 +77,7 @@ class LayeredCanvas extends React.PureComponent {
       onClick: this.handleOnClick,
       style: { backgroundColor },
       title,
-      width
+      width,
     };
     const inputProps = { ...myProps, ...clientProps };
 
@@ -96,7 +96,7 @@ LayeredCanvas.propTypes = {
   isVerbose: PropTypes.bool,
   onClick: PropTypes.func,
   title: PropTypes.string,
-  width: PropTypes.number
+  width: PropTypes.number,
 };
 
 LayeredCanvas.defaultProps = {
@@ -108,7 +108,7 @@ LayeredCanvas.defaultProps = {
   isVerbose: false,
   onClick: () => {},
   title: undefined,
-  width: 640
+  width: 640,
 };
 
 export default LayeredCanvas;
