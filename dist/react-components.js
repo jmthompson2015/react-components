@@ -268,15 +268,13 @@
       const { title, titleClass } = this.props;
       const { isExpanded } = this.state;
       const titleCell = ReactUtilities.createCell(title, "titleCell", "v-mid");
-      const expandLabel = isExpanded ? "\u25B6" : "\u25BC";
-      const expandControl = ReactDOMFactories.div(
-        { key: "expandCell", className: "dtc fr v-mid", onClick: this.toggleExpand },
-        expandLabel
-      );
-      const row = ReactUtilities.createRow([titleCell, expandControl], "titleExpandRow");
-      const table = ReactUtilities.createTable(row, "titleExpandTable", `w-100`);
+      const expandLabel = isExpanded ? "\u25BC" : "\u25B6";
+      const expandControl = ReactUtilities.createCell(expandLabel, "expandCell", "dtc pr1 v-mid", {
+        onClick: this.toggleExpand,
+      });
+      const span = ReactUtilities.createSpan([expandControl, titleCell], "titleExpandTable");
 
-      return ReactUtilities.createCell(table, "titleCell", titleClass);
+      return ReactUtilities.createCell(span, "titleCell", titleClass);
     }
 
     toggleExpandFunction() {

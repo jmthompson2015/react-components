@@ -24,15 +24,13 @@ class CollapsiblePane extends React.PureComponent {
     const { title, titleClass } = this.props;
     const { isExpanded } = this.state;
     const titleCell = RU.createCell(title, "titleCell", "v-mid");
-    const expandLabel = isExpanded ? "\u25B6" : "\u25BC";
-    const expandControl = ReactDOMFactories.div(
-      { key: "expandCell", className: "dtc fr v-mid", onClick: this.toggleExpand },
-      expandLabel
-    );
-    const row = RU.createRow([titleCell, expandControl], "titleExpandRow");
-    const table = RU.createTable(row, "titleExpandTable", `w-100`);
+    const expandLabel = isExpanded ? "\u25BC" : "\u25B6";
+    const expandControl = RU.createCell(expandLabel, "expandCell", "dtc pr1 v-mid", {
+      onClick: this.toggleExpand,
+    });
+    const span = RU.createSpan([expandControl, titleCell], "titleExpandTable");
 
-    return RU.createCell(table, "titleCell", titleClass);
+    return RU.createCell(span, "titleCell", titleClass);
   }
 
   toggleExpandFunction() {
