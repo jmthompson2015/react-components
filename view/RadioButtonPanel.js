@@ -41,6 +41,7 @@ class RadioButtonPanel extends React.Component {
     const {
       buttonPanelClass,
       className,
+      customKey,
       inputPanelClass,
       items,
       keyFunction,
@@ -71,7 +72,7 @@ class RadioButtonPanel extends React.Component {
       RU.createRow(cell1, "buttonRow", "button-row"),
     ];
 
-    return RU.createTable(rows, "radioButtonPanel", className);
+    return RU.createTable(rows, customKey, className);
   }
 }
 
@@ -84,6 +85,7 @@ RadioButtonPanel.propTypes = {
   buttonLabel: PropTypes.string,
   buttonPanelClass: PropTypes.string,
   className: PropTypes.string,
+  customKey: PropTypes.string,
   inputPanelClass: PropTypes.string,
   keyFunction: PropTypes.func,
   labelFunction: PropTypes.func,
@@ -94,6 +96,7 @@ RadioButtonPanel.defaultProps = {
   buttonLabel: "Apply",
   buttonPanelClass: "fr pt1",
   className: undefined,
+  customKey: "RadioButtonPanel",
   inputPanelClass: "bg-white tl",
   keyFunction: defaultKeyFunction,
   labelFunction: undefined,

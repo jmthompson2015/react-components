@@ -183,6 +183,7 @@
       const {
         buttonPanelClass,
         className,
+        customKey,
         inputPanelClass,
         items,
         keyFunction,
@@ -213,7 +214,7 @@
         ReactUtilities.createRow(cell1, "buttonRow", "button-row"),
       ];
 
-      return ReactUtilities.createTable(rows, "checkboxPanel", className);
+      return ReactUtilities.createTable(rows, customKey, className);
     }
   }
 
@@ -226,6 +227,7 @@
     buttonLabel: PropTypes.string,
     buttonPanelClass: PropTypes.string,
     className: PropTypes.string,
+    customKey: PropTypes.string,
     inputPanelClass: PropTypes.string,
     keyFunction: PropTypes.func,
     labelFunction: PropTypes.func,
@@ -239,6 +241,7 @@
     buttonLabel: "Apply",
     buttonPanelClass: "fr pt1",
     className: undefined,
+    customKey: "CheckboxPanel",
     inputPanelClass: "bg-white tl",
     keyFunction: defaultKeyFunction$1,
     labelFunction: undefined,
@@ -684,6 +687,7 @@
       const {
         buttonPanelClass,
         className,
+        customKey,
         inputPanelClass,
         items,
         keyFunction,
@@ -714,7 +718,7 @@
         ReactUtilities.createRow(cell1, "buttonRow", "button-row"),
       ];
 
-      return ReactUtilities.createTable(rows, "radioButtonPanel", className);
+      return ReactUtilities.createTable(rows, customKey, className);
     }
   }
 
@@ -727,6 +731,7 @@
     buttonLabel: PropTypes.string,
     buttonPanelClass: PropTypes.string,
     className: PropTypes.string,
+    customKey: PropTypes.string,
     inputPanelClass: PropTypes.string,
     keyFunction: PropTypes.func,
     labelFunction: PropTypes.func,
@@ -737,6 +742,7 @@
     buttonLabel: "Apply",
     buttonPanelClass: "fr pt1",
     className: undefined,
+    customKey: "RadioButtonPanel",
     inputPanelClass: "bg-white tl",
     keyFunction: defaultKeyFunction,
     labelFunction: undefined,
@@ -858,14 +864,14 @@
     }
 
     render() {
-      const { className } = this.props;
+      const { className, customKey } = this.props;
 
       const titleCell = this.createTitleCell();
       const elementCell = this.createElementCell();
 
       const rows = [ReactUtilities.createRow(titleCell, "titleRow"), ReactUtilities.createRow(elementCell, "elementRow")];
 
-      return ReactUtilities.createTable(rows, "titledElementTable", className);
+      return ReactUtilities.createTable(rows, customKey, className);
     }
   }
 
@@ -874,12 +880,14 @@
     title: PropTypes.string.isRequired,
 
     className: PropTypes.string,
+    customKey: PropTypes.string,
     elementClass: PropTypes.string,
     titleClass: PropTypes.string,
   };
 
   TitledElement.defaultProps = {
     className: "bg-light-gray ma1",
+    customKey: "TitledElement",
     elementClass: "ma0 tc v-mid",
     titleClass: "b f5 ph1 pt1 tc",
   };

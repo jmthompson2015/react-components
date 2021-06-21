@@ -74,6 +74,7 @@ class CheckboxPanel extends React.Component {
     const {
       buttonPanelClass,
       className,
+      customKey,
       inputPanelClass,
       items,
       keyFunction,
@@ -104,7 +105,7 @@ class CheckboxPanel extends React.Component {
       RU.createRow(cell1, "buttonRow", "button-row"),
     ];
 
-    return RU.createTable(rows, "checkboxPanel", className);
+    return RU.createTable(rows, customKey, className);
   }
 }
 
@@ -117,6 +118,7 @@ CheckboxPanel.propTypes = {
   buttonLabel: PropTypes.string,
   buttonPanelClass: PropTypes.string,
   className: PropTypes.string,
+  customKey: PropTypes.string,
   inputPanelClass: PropTypes.string,
   keyFunction: PropTypes.func,
   labelFunction: PropTypes.func,
@@ -130,6 +132,7 @@ CheckboxPanel.defaultProps = {
   buttonLabel: "Apply",
   buttonPanelClass: "fr pt1",
   className: undefined,
+  customKey: "CheckboxPanel",
   inputPanelClass: "bg-white tl",
   keyFunction: defaultKeyFunction,
   labelFunction: undefined,

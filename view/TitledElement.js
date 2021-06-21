@@ -14,14 +14,14 @@ class TitledElement extends React.PureComponent {
   }
 
   render() {
-    const { className } = this.props;
+    const { className, customKey } = this.props;
 
     const titleCell = this.createTitleCell();
     const elementCell = this.createElementCell();
 
     const rows = [RU.createRow(titleCell, "titleRow"), RU.createRow(elementCell, "elementRow")];
 
-    return RU.createTable(rows, "titledElementTable", className);
+    return RU.createTable(rows, customKey, className);
   }
 }
 
@@ -30,12 +30,14 @@ TitledElement.propTypes = {
   title: PropTypes.string.isRequired,
 
   className: PropTypes.string,
+  customKey: PropTypes.string,
   elementClass: PropTypes.string,
   titleClass: PropTypes.string,
 };
 
 TitledElement.defaultProps = {
   className: "bg-light-gray ma1",
+  customKey: "TitledElement",
   elementClass: "ma0 tc v-mid",
   titleClass: "b f5 ph1 pt1 tc",
 };
