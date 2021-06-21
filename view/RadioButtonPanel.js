@@ -25,7 +25,8 @@ class RadioButtonPanel extends React.Component {
   }
 
   createButtonTable() {
-    const applyButton = RU.createButton("Apply", "applyButton", undefined, {
+    const { buttonLabel } = this.props;
+    const applyButton = RU.createButton(buttonLabel, "applyButton", undefined, {
       onClick: this.handleApply,
     });
     const applyCell = RU.createCell(applyButton, "applyCell");
@@ -80,6 +81,7 @@ RadioButtonPanel.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
   ).isRequired,
 
+  buttonLabel: PropTypes.string,
   buttonPanelClass: PropTypes.string,
   className: PropTypes.string,
   inputPanelClass: PropTypes.string,
@@ -89,6 +91,7 @@ RadioButtonPanel.propTypes = {
 };
 
 RadioButtonPanel.defaultProps = {
+  buttonLabel: "Apply",
   buttonPanelClass: "fr pt1",
   className: undefined,
   inputPanelClass: "bg-white tl",

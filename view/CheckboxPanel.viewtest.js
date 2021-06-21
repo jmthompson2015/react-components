@@ -27,6 +27,7 @@ const selectedItems1 = [items1[1]];
 
 const element1 = React.createElement(CheckboxPanel, {
   applyOnClick,
+  buttonLabel: "OK",
   items: items1,
   selectedItems: selectedItems1,
 });

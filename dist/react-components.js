@@ -155,8 +155,8 @@
     }
 
     createButtonTable() {
-      const { useSelectButtons } = this.props;
-      const applyButton = ReactUtilities.createButton("Apply", "applyButton", undefined, {
+      const { buttonLabel, useSelectButtons } = this.props;
+      const applyButton = ReactUtilities.createButton(buttonLabel, "applyButton", undefined, {
         onClick: this.handleApply,
       });
       const applyCell = ReactUtilities.createCell(applyButton, "applyCell");
@@ -223,6 +223,7 @@
       PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
     ).isRequired,
 
+    buttonLabel: PropTypes.string,
     buttonPanelClass: PropTypes.string,
     className: PropTypes.string,
     inputPanelClass: PropTypes.string,
@@ -235,6 +236,7 @@
   };
 
   CheckboxPanel.defaultProps = {
+    buttonLabel: "Apply",
     buttonPanelClass: "fr pt1",
     className: undefined,
     inputPanelClass: "bg-white tl",
@@ -666,7 +668,8 @@
     }
 
     createButtonTable() {
-      const applyButton = ReactUtilities.createButton("Apply", "applyButton", undefined, {
+      const { buttonLabel } = this.props;
+      const applyButton = ReactUtilities.createButton(buttonLabel, "applyButton", undefined, {
         onClick: this.handleApply,
       });
       const applyCell = ReactUtilities.createCell(applyButton, "applyCell");
@@ -721,6 +724,7 @@
       PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
     ).isRequired,
 
+    buttonLabel: PropTypes.string,
     buttonPanelClass: PropTypes.string,
     className: PropTypes.string,
     inputPanelClass: PropTypes.string,
@@ -730,6 +734,7 @@
   };
 
   RadioButtonPanel.defaultProps = {
+    buttonLabel: "Apply",
     buttonPanelClass: "fr pt1",
     className: undefined,
     inputPanelClass: "bg-white tl",

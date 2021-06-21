@@ -27,6 +27,7 @@ const selectedItem1 = items1[1];
 
 const element1 = React.createElement(RadioButtonPanel, {
   applyOnClick,
+  buttonLabel: "OK",
   items: items1,
   selectedItem: selectedItem1,
 });

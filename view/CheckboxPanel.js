@@ -46,8 +46,8 @@ class CheckboxPanel extends React.Component {
   }
 
   createButtonTable() {
-    const { useSelectButtons } = this.props;
-    const applyButton = RU.createButton("Apply", "applyButton", undefined, {
+    const { buttonLabel, useSelectButtons } = this.props;
+    const applyButton = RU.createButton(buttonLabel, "applyButton", undefined, {
       onClick: this.handleApply,
     });
     const applyCell = RU.createCell(applyButton, "applyCell");
@@ -114,6 +114,7 @@ CheckboxPanel.propTypes = {
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
   ).isRequired,
 
+  buttonLabel: PropTypes.string,
   buttonPanelClass: PropTypes.string,
   className: PropTypes.string,
   inputPanelClass: PropTypes.string,
@@ -126,6 +127,7 @@ CheckboxPanel.propTypes = {
 };
 
 CheckboxPanel.defaultProps = {
+  buttonLabel: "Apply",
   buttonPanelClass: "fr pt1",
   className: undefined,
   inputPanelClass: "bg-white tl",
