@@ -363,9 +363,7 @@
     constructor(props) {
       super(props);
 
-      this.state = {
-        imageMap: {},
-      };
+      this.state = { imageMap: {} };
 
       this.handleOnClick = this.handleOnClickFunction.bind(this);
     }
@@ -376,6 +374,7 @@
     }
 
     componentDidUpdate() {
+      this.loadImages();
       this.paint();
     }
 
@@ -388,13 +387,21 @@
     loadImages() {
       const { images, isVerbose } = this.props;
 
-      for (let i = 0; i < images.length; i += 1) {
-        loadImage(images[i], isVerbose).then((img) => {
-          const { imageMap: oldImageMap } = this.state;
-          const newImageMap = { ...oldImageMap };
-          newImageMap[images[i]] = img;
-          this.setState({ imageMap: newImageMap });
-        });
+      if (!R.isEmpty(images)) {
+        const { imageMap } = this.state;
+        const filterFunction = (imageSrc) => R.isNil(imageMap[imageSrc]);
+        const missingImages = R.filter(filterFunction, images);
+
+        if (!R.isEmpty(missingImages)) {
+          const forEachFunction = (missingImage) => {
+            loadImage(missingImage, isVerbose).then((img) => {
+              const { imageMap: oldImageMap } = this.state;
+              const newImageMap = { ...oldImageMap, [missingImage]: img };
+              this.setState({ imageMap: newImageMap });
+            });
+          };
+          R.forEach(forEachFunction, missingImages);
+        }
       }
     }
 
