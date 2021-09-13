@@ -660,8 +660,9 @@
     constructor(props) {
       super(props);
 
-      const { selectedItem } = this.props;
-      this.state = { selectedItem };
+      const { items, selectedItem } = this.props;
+      const selectedItem2 = selectedItem || R.head(items);
+      this.state = { selectedItem: selectedItem2 };
       this.handleApply = this.handleApplyFunction.bind(this);
       this.handleChange = this.handleChangeFunction.bind(this);
     }
@@ -701,9 +702,10 @@
         labelFunction,
       } = this.props;
       const { selectedItem } = this.state;
+      const selectedItemKey = keyFunction(selectedItem);
 
       const mapFunction = (item) => {
-        const isChecked = selectedItem === item;
+        const isChecked = selectedItem === item || selectedItemKey === keyFunction(item);
         const input = React.createElement(RadioButton, {
           item,
           isChecked,
