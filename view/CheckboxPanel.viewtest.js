@@ -17,6 +17,7 @@ const element0 = React.createElement(CheckboxPanel, {
   applyOnClick,
   items: items0,
   selectedItems: selectedItems0,
+  useApplyButton: true,
 });
 ReactDOM.render(element0, document.getElementById("panel0"));
 
@@ -30,6 +31,7 @@ const element1 = React.createElement(CheckboxPanel, {
   buttonLabel: "OK",
   items: items1,
   selectedItems: selectedItems1,
+  useApplyButton: true,
 });
 ReactDOM.render(element1, document.getElementById("panel1"));
 
@@ -75,6 +77,30 @@ const element2 = React.createElement(CheckboxPanel, {
   items: items2,
   labelFunction: labelFunction2,
   selectedItems: selectedItems2,
+  useApplyButton: true,
   useSelectButtons: true,
 });
 ReactDOM.render(element2, document.getElementById("panel2"));
+
+// /////////////////////////////////////////////////////////////////////////////
+const selectedItems3 = [items2[1], items2[3]];
+const element3 = React.createElement(CheckboxPanel, {
+  applyOnClick,
+  items: items2,
+  labelFunction: labelFunction2,
+  selectedItems: selectedItems3,
+  useApplyButton: false,
+  useSelectButtons: true,
+});
+ReactDOM.render(element3, document.getElementById("panel3"));
+
+// /////////////////////////////////////////////////////////////////////////////
+const selectedItems4 = [items2[0], items2[1]];
+const element4 = React.createElement(CheckboxPanel, {
+  applyOnClick,
+  items: items2,
+  labelFunction: labelFunction2,
+  selectedItems: selectedItems4,
+  useApplyButton: false,
+});
+ReactDOM.render(element4, document.getElementById("panel4"));

@@ -23,6 +23,7 @@ class CheckboxPanel extends React.Component {
   }
 
   handleChangeFunction(item, isChecked) {
+    const { applyOnClick, useApplyButton } = this.props;
     const { selectedItems } = this.state;
     let newSelectedItems;
 
@@ -33,25 +34,43 @@ class CheckboxPanel extends React.Component {
     }
 
     this.setState({ selectedItems: newSelectedItems });
+
+    if (!useApplyButton) {
+      applyOnClick(newSelectedItems);
+    }
   }
 
   handleSelectAllFunction() {
+    const { applyOnClick, useApplyButton } = this.props;
     const { items } = this.props;
 
     this.setState({ selectedItems: items });
+
+    if (!useApplyButton) {
+      applyOnClick(items);
+    }
   }
 
   handleSelectNoneFunction() {
+    const { applyOnClick, useApplyButton } = this.props;
     this.setState({ selectedItems: [] });
+
+    if (!useApplyButton) {
+      applyOnClick([]);
+    }
   }
 
   createButtonTable() {
-    const { buttonLabel, useSelectButtons } = this.props;
-    const applyButton = RU.createButton(buttonLabel, "applyButton", undefined, {
-      onClick: this.handleApply,
-    });
-    const applyCell = RU.createCell(applyButton, "applyCell");
-    let cells = applyCell;
+    const { buttonLabel, useApplyButton, useSelectButtons } = this.props;
+    let cells = [];
+
+    if (useApplyButton) {
+      const applyButton = RU.createButton(buttonLabel, "applyButton", undefined, {
+        onClick: this.handleApply,
+      });
+      const applyCell = RU.createCell(applyButton, "applyCell");
+      cells = [applyCell];
+    }
 
     if (useSelectButtons) {
       const selectAllButton = RU.createButton("Select All", "selectAllButton", undefined, {
@@ -62,7 +81,7 @@ class CheckboxPanel extends React.Component {
       });
       const cell0 = RU.createCell(selectAllButton, "selectAllCell");
       const cell1 = RU.createCell(selectNoneButton, "selectNoneCell");
-      cells = [cell0, cell1, applyCell];
+      cells = R.concat([cell0, cell1], cells);
     }
 
     const row = RU.createRow(cells, "buttonRow");
@@ -125,6 +144,7 @@ CheckboxPanel.propTypes = {
   selectedItems: PropTypes.arrayOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.shape()])
   ),
+  useApplyButton: PropTypes.bool,
   useSelectButtons: PropTypes.bool,
 };
 
@@ -137,6 +157,7 @@ CheckboxPanel.defaultProps = {
   keyFunction: defaultKeyFunction,
   labelFunction: undefined,
   selectedItems: [],
+  useApplyButton: false,
   useSelectButtons: false,
 };
 
